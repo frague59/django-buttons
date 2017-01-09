@@ -111,6 +111,23 @@ def back(text=_('Back'), icon='chevron-left', icon_position=IconPosition.LEFT, b
 
 
 @register.inclusion_tag('buttons/button.html')
+def link(url, text='link', icon='link', icon_position=IconPosition.LEFT, btn_css_class='btn-default', **kwargs):
+    """
+    Displays a simple ``link`` button
+
+    :param url: **Mandatory !** target url
+    :param text: link text, default 'link'
+    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
+    :param btn_css_class: Button bootstrap class, default 'btn-default'
+
+    :param kwargs:
+
+    :returns: Render-able dict
+    """
+    return button(text=text, icon=icon, icon_position=icon_position, btn_css_class=btn_css_class, url='/', **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html')
 def home(text=_('Home'), icon='home', icon_position=IconPosition.LEFT, btn_css_class='btn-primary', **kwargs):
     """
     Displays a ``back`` button
