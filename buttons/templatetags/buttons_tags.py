@@ -12,9 +12,10 @@ import logging
 
 import enum
 from django import template
+from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-logger = logging.getLogger('buttons.templatetags.buttons_tags')
+logger = logging.getLogger('buttons.buttons_tags')
 
 register = template.Library()
 
@@ -30,9 +31,9 @@ class IconPosition(enum.Enum):
 
 
 @register.inclusion_tag('buttons/button.html')
-def button(**kwargs):
+def btn_button(**kwargs):
     """
-    Displays a default button
+    Displays a default btn_button
 
     :param kwargs: Additional keyword args in:
 
@@ -41,32 +42,43 @@ def button(**kwargs):
     + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
     + `btn_css_class`: Button bootstrap class
     + `btn_id`: Button Id
-    + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``
+    + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``btn_button``
     + `dismiss`: If `True`, the
 
     :returns: Render-able dict
     """
-    text = kwargs.get('text', _('Button'))
-    icon = kwargs.get('icon', None)
-    icon_position = kwargs.get('icon_position', IconPosition.NONE)
-    icon_css_class = kwargs.get('icon_css_class', None)
-    btn_css_class = kwargs.get('btn_css_class', 'btn-default')
-    btn_id = kwargs.get('id', None)
-    btn_url = kwargs.get('url', None)
-    data_dismiss = kwargs.get('data_dismiss', None)
-    data_toggle = kwargs.get('data_toggle', None)
-    data_target = kwargs.get('data_target', None)
+    logger.debug('btn_button() kwargs = %s', kwargs)
+
+    text = kwargs.pop('text', _('Button'))
+    url = kwargs.pop('url', None)
+    href_target = kwargs.pop('href_target', None)
+
+    icon = kwargs.pop('icon', settings.BUTTONS_ICON)
+    icon_position = kwargs.pop('icon_position', settings.BUTTONS_ICON_POSITION)
+    icon_css_extra = kwargs.pop('icon_css_extra', settings.BUTTONS_ICON_CSS_EXTRA)
+
+    btn_css_color = kwargs.pop('btn_css_color', settings.BUTTONS_BTN_CSS_COLOR)
+    btn_css_extra = kwargs.pop('btn_css_extra', settings.BUTTONS_BTN_CSS_EXTRA)
+    btn_id = kwargs.pop('id', None)
+
+    data_dismiss = kwargs.pop('data_dismiss', None)
+    data_toggle = kwargs.pop('data_toggle', None)
+    data_target = kwargs.pop('data_target', None)
 
     # Dict initialization
     output = {'text': text,
+              'url': url,
+              'href_target': href_target,
+              # ison informations
               'icon': icon,
               'icon_position': icon_position,
-              'icon_css_class': icon_css_class,
-              'btn_css_class': btn_css_class,
-              'btn_type': 'button',
+              'icon_css_extra': icon_css_extra,
+              # btn informations
+              'btn_css_color': btn_css_color,
+              'btn_css_extra': btn_css_extra,
+              'btn_type': 'btn_button',
               'btn_id': btn_id,
-              'btn_url': btn_url,
-              # Data
+              # `data-*` fields
               'data_dismiss': data_dismiss,
               'data_toggle': data_toggle,
               'data_target': data_target
@@ -76,79 +88,103 @@ def button(**kwargs):
 
 
 @register.inclusion_tag('buttons/button.html')
-def download(text=_('Download'), icon='download', **kwargs):
+def btn_download(url, text=_('Download'), icon='download', **kwargs):
     """
-    Displays a ``download`` button
+    Displays a ``btn_download`` btn_button
 
+    :param url: **Mandatory** target url
     :param text: Button text
     :param icon: Button icon
     :param kwargs: Additional keyword args in:
 
-    + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
     + `btn_css_class`: Button bootstrap class
 
     :returns: Render-able dict
     """
-    return button(text=text, icon=icon, **kwargs)
+    return btn_button(url=url, text=text, icon=icon, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html')
-def back(text=_('Back'), icon='chevron-left', icon_position=IconPosition.LEFT, btn_css_class='btn-primary', **kwargs):
+def btn_back(text=_('Back'), icon='chevron-left', icon_position=IconPosition.LEFT, btn_css_color='btn-primary', **kwargs):
     """
-    Displays a ``back`` button
+    Displays a ``btn_back`` btn_button
 
     :param text: Button text
     :param icon: Button icon
     :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.LEFT`
-    :param btn_css_class: Button css class, default `btn-primary`
+    :param btn_css_color: Button css class, default `btn-primary`
     :param kwargs: Additional keyword args in:
 
     + `btn_css_class`: Button bootstrap class
 
     :returns: Render-able dict
     """
-    return button(text=text, icon=icon, icon_position=icon_position, url='javascript:history.back()', **kwargs)
+    return btn_button(text=text, icon=icon, icon_position=icon_position, btn_css_color='btn-primary',
+                      url='javascript:history.btn_back()', **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html')
-def link(url, text='link', icon='link', icon_position=IconPosition.LEFT, btn_css_class='btn-default', **kwargs):
+def btn_link(url, text=_('Link'), icon='btn_link', icon_position=IconPosition.LEFT,
+             btn_css_color='btn-default', **kwargs):
     """
-    Displays a simple ``link`` button
+    Displays a simple ``link`` btn_button
 
-    :param url: **Mandatory !** target url
+    :param url: **Mandatory** target url
     :param text: link text, default 'link'
+    :param icon: Icon label, default 'link'
     :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
-    :param btn_css_class: Button bootstrap class, default 'btn-default'
+    :param btn_css_color: Button bootstrap class, default 'btn-default'
 
     :param kwargs:
 
     :returns: Render-able dict
     """
-    return button(text=text, icon=icon, icon_position=icon_position, btn_css_class=btn_css_class, url='/', **kwargs)
+    return btn_button(url=url, text=text, icon=icon, icon_position=icon_position,
+                      btn_css_color=btn_css_color, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html')
-def home(text=_('Home'), icon='home', icon_position=IconPosition.LEFT, btn_css_class='btn-primary', **kwargs):
+def btn_home(url='/', text=_('Home'), icon='home', icon_position=IconPosition.LEFT, btn_css_color='btn-primary',
+             **kwargs):
     """
-    Displays a ``back`` button
+    Displays a ``btn_back`` btn_button
 
+    :param url: Target URL, default '/'
     :param text: Button text, default 'Home'
     :param icon: Button icon, default 'fa-home'
     :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
-    :param btn_css_class: Button bootstrap class, default 'btn-primary'
+    :param btn_css_color: Button bootstrap class, default 'btn-primary'
 
     :returns: Render-able dict
     """
-    return button(text=text, icon=icon, icon_position=icon_position, btn_css_class=btn_css_class, url='/', **kwargs)
+    return btn_button(url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
+                      **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html')
-def submit(text=_('Submit'), icon='check', icon_position=IconPosition.RIGHT, btn_css_class='btn-primary', **kwargs):
+def btn_submit(text=_('Submit'), icon='check', btn_css_color='btn-primary', **kwargs):
     """
-    Displays a ``submit`` button
+    Displays a ``submit`` btn_button
 
+    :param text: Button text, default 'Submit'
+    :param icon: Button icon, default 'check'
+    :param btn_css_color: Base btn_button color
 
     :returns: Render-able dict
     """
-    return button(text=text, btn_type='submit', icon=icon, icon_position=icon_position, btn_css_class=btn_css_class, **kwargs)
+    return btn_button(text=text, btn_type='submit', icon=icon, btn_css_color=btn_css_color, **kwargs)
 
+
+@register.inclusion_tag('buttons/button.html')
+def btn_list(url, text=_('List'), icon='list', btn_css_color='btn-primary', **kwargs):
+    return btn_button(url=url, text=text, icon=icon, btn_css_color=btn_css_color, **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html')
+def btn_search(url, text=_('Search'), **kwargs):
+    return btn_button(url=url, text=text, **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html')
+def btn_close(btn_css_color='btn-warning'):
+    return btn_button(btn_css_color=btn_css_color)

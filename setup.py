@@ -11,6 +11,6 @@ setup(
     author_email='fguerin@ville-tourcoing.fr',
     url='https://github.com/frague59/django-buttons',
     download_url='https://github.com/frague59/django-buttons/tarball/0.1',
-    keywords=['django', 'django-fontawesome'],
+    keywords=['django', 'django-fontawesome', 'django-appconf'],
     classifiers=[], requires=['django']
 )
