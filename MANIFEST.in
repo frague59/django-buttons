@@ -1,0 +1,11 @@
+# Includes LICENCE.txt
+include LICENCE.txt
+
+# Include template files
+recursive-include buttons/templates *
+
+# Include i18n files
+recursive-include buttons/locale *
+
+# Exclude docs directory
+prune docs
