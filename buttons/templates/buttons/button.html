@@ -1,0 +1,32 @@
+{% if debug %}<!-- buttons/button.html -->{% endif %}
+{% load fontawesome %}
+{% spaceless %}
+    {% if btn_url %}
+        <!-- icon_position.value = {{ icon_position }} -->
+        <a
+                href="{{ btn_url }}"
+                title="{{ text }}"
+                alt="{{ text }}"
+                class="btn {{ btn_css_class }}">{% if icon_position.value == 'LEFT' %}
+            {% fontawesome_icon icon %}&nbsp;{{ text }}
+        {% elif icon_position.value == 'RIGHT' %}
+            {{ text }}&nbsp;{% fontawesome_icon icon %}
+        {% else %}
+            {{ text }}
+        {% endif %}</a>
+    {% else %}
+        <button type="{{ btn_type }}"
+                {% if btn_id %}id="{{ btn_id }}"{% endif %}
+                class="btn {{ btn_css_class }}"
+                text="{{ text }}" alt="{{ text }}"
+                {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
+                {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
+                {% if data_target %}data-target="{{ data_target }}" {% endif %}>{% if icon_position.value == 'LEFT' %}
+            {% fontawesome_icon icon %}&nbsp;{{ text }}
+        {% elif icon_position.value == 'RIGHT' %}
+            {{ text }}&nbsp;{% fontawesome_icon icon %}
+        {% else %}
+            {{ text }}
+        {% endif %}</button>
+    {% endif %}
+{% endspaceless %}
