@@ -188,3 +188,8 @@ def btn_search(url, text=_('Search'), **kwargs):
 @register.inclusion_tag('buttons/button.html')
 def btn_close(btn_css_color='btn-warning'):
     return btn_button(btn_css_color=btn_css_color)
+
+
+@register.inclusion_tag('buttons/button.html')
+def btn_login(url, text=_('Login'), icon='login', **kwargs):
+    return btn_button(url=url, text=text, icon=icon, **kwargs)
