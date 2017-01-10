@@ -1,0 +1,403 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>buttons.templatetags.buttons_tags &mdash; django-buttons 1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../search.html"/>
+    <link rel="top" title="django-buttons 1 documentation" href="../../../index.html"/>
+        <link rel="up" title="Module code" href="../../index.html"/> 
+
+  
+  <script src="../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> django-buttons
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../buttons.html">buttons package</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../index.html">django-buttons</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../index.html">Docs</a> &raquo;</li>
+      
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      
+    <li>buttons.templatetags.buttons_tags</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for buttons.templatetags.buttons_tags</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Template tags to display buttons in pages</span>
+
+<span class="sd">:creationdate: 09/01/2017 09:21</span>
+<span class="sd">:moduleauthor: François GUÉRIN &lt;fguerin@ville-tourcoing.fr&gt;</span>
+<span class="sd">:modulename: forms.models</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">import</span> <span class="nn">enum</span>
+<span class="kn">from</span> <span class="nn">django</span> <span class="k">import</span> <span class="n">template</span>
+<span class="kn">from</span> <span class="nn">django.conf</span> <span class="k">import</span> <span class="n">settings</span>
+<span class="kn">from</span> <span class="nn">django.utils.translation</span> <span class="k">import</span> <span class="n">ugettext_lazy</span> <span class="k">as</span> <span class="n">_</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;buttons.buttons_tags&#39;</span><span class="p">)</span>
+
+<span class="n">register</span> <span class="o">=</span> <span class="n">template</span><span class="o">.</span><span class="n">Library</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="IconPosition"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.IconPosition">[docs]</a><span class="k">class</span> <span class="nc">IconPosition</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Icon positions enumeration</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">LEFT</span> <span class="o">=</span> <span class="s1">&#39;LEFT&#39;</span>
+    <span class="n">RIGHT</span> <span class="o">=</span> <span class="s1">&#39;RIGHT&#39;</span>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;NONE&#39;</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_button"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_button">[docs]</a><span class="k">def</span> <span class="nf">btn_button</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a default button</span>
+
+<span class="sd">    :param kwargs: Additional keyword args in:</span>
+
+<span class="sd">    + `text`: Button text, default &#39;Button&#39;</span>
+<span class="sd">    + `url`: Target URL, if needed</span>
+<span class="sd">    + `icon`: Button icon, default ``None``</span>
+<span class="sd">    + `icon_position`: Button icon position, , default ``None``, aka no icon displayed</span>
+<span class="sd">    + `btn_css_class`: Button bootstrap class</span>
+<span class="sd">    + `btn_id`: Button Id</span>
+<span class="sd">    + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``</span>
+<span class="sd">    + `dismiss`: If `True`, the</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;btn_button() kwargs = </span><span class="si">%s</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+
+    <span class="n">text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;text&#39;</span><span class="p">,</span> <span class="n">_</span><span class="p">(</span><span class="s1">&#39;Button&#39;</span><span class="p">))</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;url&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">href_target</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;href_target&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">icon</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;icon&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_ICON</span><span class="p">)</span>
+    <span class="n">icon_position</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;icon_position&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_ICON_POSITION</span><span class="p">)</span>
+    <span class="n">icon_css_extra</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;icon_css_extra&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_ICON_CSS_EXTRA</span><span class="p">)</span>
+
+    <span class="n">btn_css_color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;btn_css_color&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_BTN_CSS_COLOR</span><span class="p">)</span>
+    <span class="n">btn_css_extra</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;btn_css_extra&#39;</span><span class="p">,</span> <span class="n">settings</span><span class="o">.</span><span class="n">BUTTONS_BTN_CSS_EXTRA</span><span class="p">)</span>
+    <span class="n">btn_id</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">data_dismiss</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data_dismiss&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">data_toggle</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data_toggle&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">data_target</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;data_target&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="c1"># Dict initialization</span>
+    <span class="n">output</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;text&#39;</span><span class="p">:</span> <span class="n">text</span><span class="p">,</span>
+              <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">,</span>
+              <span class="s1">&#39;href_target&#39;</span><span class="p">:</span> <span class="n">href_target</span><span class="p">,</span>
+              <span class="c1"># ison informations</span>
+              <span class="s1">&#39;icon&#39;</span><span class="p">:</span> <span class="n">icon</span><span class="p">,</span>
+              <span class="s1">&#39;icon_position&#39;</span><span class="p">:</span> <span class="n">icon_position</span><span class="p">,</span>
+              <span class="s1">&#39;icon_css_extra&#39;</span><span class="p">:</span> <span class="n">icon_css_extra</span><span class="p">,</span>
+              <span class="c1"># btn informations</span>
+              <span class="s1">&#39;btn_css_color&#39;</span><span class="p">:</span> <span class="n">btn_css_color</span><span class="p">,</span>
+              <span class="s1">&#39;btn_css_extra&#39;</span><span class="p">:</span> <span class="n">btn_css_extra</span><span class="p">,</span>
+              <span class="s1">&#39;btn_type&#39;</span><span class="p">:</span> <span class="s1">&#39;button&#39;</span><span class="p">,</span>
+              <span class="s1">&#39;btn_id&#39;</span><span class="p">:</span> <span class="n">btn_id</span><span class="p">,</span>
+              <span class="c1"># `data-*` fields</span>
+              <span class="s1">&#39;data_dismiss&#39;</span><span class="p">:</span> <span class="n">data_dismiss</span><span class="p">,</span>
+              <span class="s1">&#39;data_toggle&#39;</span><span class="p">:</span> <span class="n">data_toggle</span><span class="p">,</span>
+              <span class="s1">&#39;data_target&#39;</span><span class="p">:</span> <span class="n">data_target</span>
+              <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">output</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_download"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_download">[docs]</a><span class="k">def</span> <span class="nf">btn_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Download&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;download&#39;</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">IconPosition</span><span class="o">.</span><span class="n">RIGHT</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a ``download`` button</span>
+
+<span class="sd">    :param url: **Mandatory** target url</span>
+<span class="sd">    :param text: Button text</span>
+<span class="sd">    :param icon: Button icon</span>
+<span class="sd">    :param kwargs: Additional keyword args in:</span>
+
+<span class="sd">    + `btn_css_class`: Button bootstrap class</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">icon_position</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_back"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_back">[docs]</a><span class="k">def</span> <span class="nf">btn_back</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Back&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;chevron-left&#39;</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">IconPosition</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-primary&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a ``btn_back`` button</span>
+
+<span class="sd">    :param text: Button text</span>
+<span class="sd">    :param icon: Button icon</span>
+<span class="sd">    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.LEFT`</span>
+<span class="sd">    :param btn_css_color: Button css class, default `btn-primary`</span>
+<span class="sd">    :param kwargs: Additional keyword args in:</span>
+
+<span class="sd">    + `btn_css_class`: Button bootstrap class</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">icon_position</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-primary&#39;</span><span class="p">,</span>
+                      <span class="n">url</span><span class="o">=</span><span class="s1">&#39;javascript:history.btn_back()&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_link"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_link">[docs]</a><span class="k">def</span> <span class="nf">btn_link</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Link&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;btn_link&#39;</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">IconPosition</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span>
+             <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-default&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a simple ``link`` btn_button</span>
+
+<span class="sd">    :param url: **Mandatory** target url</span>
+<span class="sd">    :param text: link text, default &#39;link&#39;</span>
+<span class="sd">    :param icon: Icon label, default &#39;link&#39;</span>
+<span class="sd">    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`</span>
+<span class="sd">    :param btn_css_color: Button bootstrap class, default &#39;btn-default&#39;</span>
+
+<span class="sd">    :param kwargs:</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">icon_position</span><span class="p">,</span>
+                      <span class="n">btn_css_color</span><span class="o">=</span><span class="n">btn_css_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_home"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_home">[docs]</a><span class="k">def</span> <span class="nf">btn_home</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Home&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;home&#39;</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">IconPosition</span><span class="o">.</span><span class="n">LEFT</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-primary&#39;</span><span class="p">,</span>
+             <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a ``btn_back`` btn_button</span>
+
+<span class="sd">    :param url: Target URL, default &#39;/&#39;</span>
+<span class="sd">    :param text: Button text, default &#39;Home&#39;</span>
+<span class="sd">    :param icon: Button icon, default &#39;fa-home&#39;</span>
+<span class="sd">    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`</span>
+<span class="sd">    :param btn_css_color: Button bootstrap class, default &#39;btn-primary&#39;</span>
+<span class="sd">    :param kwargs: Additional keyword args</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">icon_position</span><span class="o">=</span><span class="n">icon_position</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="n">btn_css_color</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_submit"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_submit">[docs]</a><span class="k">def</span> <span class="nf">btn_submit</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Submit&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;check&#39;</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-primary&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a ``submit`` button</span>
+
+<span class="sd">    :param text: Button text, default &#39;Submit&#39;</span>
+<span class="sd">    :param icon: Button icon, default &#39;check&#39;</span>
+<span class="sd">    :param btn_css_color: Base button color</span>
+<span class="sd">    :param kwargs: Additional keyword args</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">btn_type</span><span class="o">=</span><span class="s1">&#39;submit&#39;</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="n">btn_css_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_list"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_list">[docs]</a><span class="k">def</span> <span class="nf">btn_list</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;List&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;list&#39;</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-primary&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Displays a ``list`` button</span>
+
+<span class="sd">    :param url: **Mandatory** target url</span>
+<span class="sd">    :param text: Button text, default &#39;Submit&#39;</span>
+<span class="sd">    :param icon: Button icon, default &#39;check&#39;</span>
+<span class="sd">    :param btn_css_color: Base button color</span>
+<span class="sd">    :param kwargs: Additional keyword args</span>
+
+<span class="sd">    :returns: Render-able dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="n">btn_css_color</span><span class="o">=</span><span class="n">btn_css_color</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_search"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_search">[docs]</a><span class="k">def</span> <span class="nf">btn_search</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Search&#39;</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_close"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_close">[docs]</a><span class="k">def</span> <span class="nf">btn_close</span><span class="p">(</span><span class="n">btn_css_color</span><span class="o">=</span><span class="s1">&#39;btn-warning&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">btn_css_color</span><span class="o">=</span><span class="n">btn_css_color</span><span class="p">)</span></div>
+
+
+<span class="nd">@register</span><span class="o">.</span><span class="n">inclusion_tag</span><span class="p">(</span><span class="s1">&#39;buttons/button.html&#39;</span><span class="p">)</span>
+<div class="viewcode-block" id="btn_login"><a class="viewcode-back" href="../../../buttons.templatetags.html#buttons.templatetags.buttons_tags.btn_login">[docs]</a><span class="k">def</span> <span class="nf">btn_login</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">_</span><span class="p">(</span><span class="s1">&#39;Login&#39;</span><span class="p">),</span> <span class="n">icon</span><span class="o">=</span><span class="s1">&#39;login&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">btn_button</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">,</span> <span class="n">icon</span><span class="o">=</span><span class="n">icon</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017, François GUÉRIN.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../',
+            VERSION:'1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
