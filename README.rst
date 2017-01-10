@@ -32,7 +32,19 @@ Use buttons in your templates
 
    {% load buttons_tags %}
    ...
-   {% home %}
+   {% btn_home %}
+
+Buttons can have some parameters :
+
++ `url`: target url
++ `title`: displayed text
++ `icon`: fa aware name, ie. 'home' for `fa-home <http://fontawesome.io/icon/home/>`_
++ `icon_position`: Position of the icon, 'right', 'left' or 'none' (no icon displayed)
+...
+
+
+Enjoy
+=====
 
 
 
