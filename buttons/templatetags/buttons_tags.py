@@ -33,16 +33,17 @@ class IconPosition(enum.Enum):
 @register.inclusion_tag('buttons/button.html')
 def btn_button(**kwargs):
     """
-    Displays a default btn_button
+    Displays a default button
 
     :param kwargs: Additional keyword args in:
 
     + `text`: Button text, default 'Button'
+    + `url`: Target URL, if needed
     + `icon`: Button icon, default ``None``
     + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
     + `btn_css_class`: Button bootstrap class
     + `btn_id`: Button Id
-    + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``btn_button``
+    + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``
     + `dismiss`: If `True`, the
 
     :returns: Render-able dict
@@ -76,7 +77,7 @@ def btn_button(**kwargs):
               # btn informations
               'btn_css_color': btn_css_color,
               'btn_css_extra': btn_css_extra,
-              'btn_type': 'btn_button',
+              'btn_type': 'button',
               'btn_id': btn_id,
               # `data-*` fields
               'data_dismiss': data_dismiss,
@@ -88,9 +89,9 @@ def btn_button(**kwargs):
 
 
 @register.inclusion_tag('buttons/button.html')
-def btn_download(url, text=_('Download'), icon='download', **kwargs):
+def btn_download(url, text=_('Download'), icon='download', icon_position=IconPosition.RIGHT, **kwargs):
     """
-    Displays a ``btn_download`` btn_button
+    Displays a ``download`` button
 
     :param url: **Mandatory** target url
     :param text: Button text
@@ -101,13 +102,13 @@ def btn_download(url, text=_('Download'), icon='download', **kwargs):
 
     :returns: Render-able dict
     """
-    return btn_button(url=url, text=text, icon=icon, **kwargs)
+    return btn_button(url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html')
 def btn_back(text=_('Back'), icon='chevron-left', icon_position=IconPosition.LEFT, btn_css_color='btn-primary', **kwargs):
     """
-    Displays a ``btn_back`` btn_button
+    Displays a ``btn_back`` button
 
     :param text: Button text
     :param icon: Button icon
@@ -154,6 +155,7 @@ def btn_home(url='/', text=_('Home'), icon='home', icon_position=IconPosition.LE
     :param icon: Button icon, default 'fa-home'
     :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
     :param btn_css_color: Button bootstrap class, default 'btn-primary'
+    :param kwargs: Additional keyword args
 
     :returns: Render-able dict
     """
@@ -164,11 +166,12 @@ def btn_home(url='/', text=_('Home'), icon='home', icon_position=IconPosition.LE
 @register.inclusion_tag('buttons/button.html')
 def btn_submit(text=_('Submit'), icon='check', btn_css_color='btn-primary', **kwargs):
     """
-    Displays a ``submit`` btn_button
+    Displays a ``submit`` button
 
     :param text: Button text, default 'Submit'
     :param icon: Button icon, default 'check'
-    :param btn_css_color: Base btn_button color
+    :param btn_css_color: Base button color
+    :param kwargs: Additional keyword args
 
     :returns: Render-able dict
     """
@@ -177,6 +180,17 @@ def btn_submit(text=_('Submit'), icon='check', btn_css_color='btn-primary', **kw
 
 @register.inclusion_tag('buttons/button.html')
 def btn_list(url, text=_('List'), icon='list', btn_css_color='btn-primary', **kwargs):
+    """
+    Displays a ``list`` button
+
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Submit'
+    :param icon: Button icon, default 'check'
+    :param btn_css_color: Base button color
+    :param kwargs: Additional keyword args
+
+    :returns: Render-able dict
+    """
     return btn_button(url=url, text=text, icon=icon, btn_css_color=btn_css_color, **kwargs)
 
 

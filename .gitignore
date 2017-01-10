@@ -146,5 +146,6 @@ ENV/
 # Django secret
 secret.txt
 
-# Faboric task temporary files
+# Fabric task temporary files
 **/.fab_tasks~
+fabfile/
