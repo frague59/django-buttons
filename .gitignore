@@ -148,4 +148,3 @@ secret.txt
 
 # Fabric task temporary files
 **/.fab_tasks~
-fabfile/
