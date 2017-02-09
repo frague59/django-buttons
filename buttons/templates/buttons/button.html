@@ -1,20 +1,25 @@
 {% if debug %}<!-- buttons/button.html -->{% endif %}
 {% load fontawesome %}
-{% with licon_position=icon_position.value|default_if_none:icon_position|default_if_none:'RIGHT'|upper %}
+{% with licon_position=icon_position|upper %}
+    <!-- licon_position = {{ licon_position }} -->
     {% spaceless %}
         {% if url %}
-            <!-- licon_position = {{ licon_position }} -->
             <a
                     href="{{ url }}"
-                    title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"
+                    {% if btn_id %}id="{{ btn_id }}"{% endif %}
+                    {% if tooltip %}title="{{ tooltip }}" alt="{{ tooltip }}" aria-label="{{ tooltip }}"
+                    {% else %}title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"{% endif %}
                     class="btn {{ btn_css_color }} {{ btn_css_extra }}"
                     {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
                     {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
+                    {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
                     {% if data_target %}data-target="{{ data_target }}" {% endif %}>
                 {% if licon_position == 'LEFT' %}
                     {% fontawesome_icon icon %}&nbsp;{{ text }}
                 {% elif licon_position == 'RIGHT' %}
                     {{ text }}&nbsp;{% fontawesome_icon icon %}
+                {% elif licon_position == 'ONLY' %}
+                    {% fontawesome_icon icon %}
                 {% else %}
                     {{ text }}
                 {% endif %}
@@ -22,15 +27,19 @@
         {% else %}
             <button type="{{ btn_type }}"
                     {% if btn_id %}id="{{ btn_id }}"{% endif %}
-                    title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"
+                    {% if tooltip %}title="{{ tooltip }}" alt="{{ tooltip }}" aria-label="{{ tooltip }}"
+                    {% else %}title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"{% endif %}
                     class="btn {{ btn_css_color }} {{ btn_css_extra }}"
                     {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
                     {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
+                    {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
                     {% if data_target %}data-target="{{ data_target }}" {% endif %}>
                 {% if licon_position == 'LEFT' %}
                     {% fontawesome_icon icon %}&nbsp;{{ text }}
                 {% elif licon_position == 'RIGHT' %}
                     {{ text }}&nbsp;{% fontawesome_icon icon %}
+                {% elif licon_position == 'ONLY' %}
+                    {% fontawesome_icon icon %}
                 {% else %}
                     {{ text }}
                 {% endif %}
