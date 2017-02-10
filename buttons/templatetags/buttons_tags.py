@@ -31,6 +31,10 @@ class IconPosition(enum.Enum):
     NONE = 'NONE'
 
 
+def _get_param(key, context, kwargs, default=None):
+    return context.get(key) or kwargs.get(key, None) or default
+
+
 @register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_button(context, **kwargs):
     """
@@ -56,30 +60,31 @@ def btn_button(context, **kwargs):
     logger.debug('btn_button() context = %s', context)
     logger.debug('btn_button() kwargs = %s', kwargs)
 
-    text = kwargs.pop('text', None) or context.get('text')
-    url = kwargs.pop('url', None) or context.get('url')
-    btn_id = kwargs.pop('id', None) or context.get('id') or kwargs.pop('btn_id', None) or context.get('btn_id')
+    text = _get_param('text', context, kwargs)
+    url = _get_param('url', context, kwargs)
+    btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
 
-    tooltip = kwargs.pop('tooltip', None) or context.get('tooltip')
+    tooltip = _get_param('tooltip', context, kwargs)
 
-    icon = kwargs.pop('icon', settings.BUTTONS_ICON) or context.get('icon')
-    icon_position = kwargs.pop('icon_position', None) or context.get('icon_position') or settings.BUTTONS_ICON_POSITION
+    icon = _get_param('icon', context, kwargs,settings.BUTTONS_ICON)
+
+    icon_position = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_POSITION)
     if isinstance(icon_position, IconPosition):
         icon_position = icon_position.value
+    else:
+        icon_position = icon_position.upper()
 
-    icon_css_extra = (kwargs.pop('icon_css_extra', None) or
-                      context.get('icon_css_extra') or
-                      settings.BUTTONS_ICON_CSS_EXTRA)
+    icon_css_extra = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_CSS_EXTRA)
 
-    btn_css_color = kwargs.pop('btn_css_color', None) or context.get('btn_css_color') or settings.BUTTONS_BTN_CSS_COLOR
-    btn_css_extra = kwargs.pop('btn_css_extra', None) or context.get('btn_css_extra') or settings.BUTTONS_BTN_CSS_EXTRA
+    btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
+    btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
 
-    data_dismiss = kwargs.pop('data_dismiss', None) or context.get('data_dismiss')
-    data_toggle = kwargs.pop('data_toggle', None) or context.get('data_toggle')
-    data_target = kwargs.pop('data_target', None) or context.get('data_target')
-    data_placement = kwargs.pop('data_placement', None) or context.get('data_placement')
+    data_dismiss = _get_param('data_dismiss', context, kwargs)
+    data_toggle = _get_param('data_toggle', context, kwargs)
+    data_target = _get_param('data_target', context, kwargs)
+    data_placement = _get_param('data_placement', context, kwargs)
 
-    href_target = kwargs.pop('href_target', None) or context.get('href_target')
+    href_target = _get_param('href_target', context, kwargs)
 
     # Dict initialization
     output = {'text': text,
