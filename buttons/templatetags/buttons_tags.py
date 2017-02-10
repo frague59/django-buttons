@@ -64,6 +64,9 @@ def btn_button(context, **kwargs):
 
     icon = kwargs.pop('icon', settings.BUTTONS_ICON) or context.get('icon')
     icon_position = kwargs.pop('icon_position', None) or context.get('icon_position') or settings.BUTTONS_ICON_POSITION
+    if isinstance(icon_position, IconPosition):
+        icon_position = icon_position.value
+
     icon_css_extra = (kwargs.pop('icon_css_extra', None) or
                       context.get('icon_css_extra') or
                       settings.BUTTONS_ICON_CSS_EXTRA)
