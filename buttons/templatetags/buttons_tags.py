@@ -66,7 +66,7 @@ def btn_button(context, **kwargs):
 
     tooltip = _get_param('tooltip', context, kwargs)
 
-    icon = _get_param('icon', context, kwargs,settings.BUTTONS_ICON)
+    icon = _get_param('icon', context, kwargs, settings.BUTTONS_ICON)
 
     icon_position = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_POSITION)
     if isinstance(icon_position, IconPosition):
@@ -318,7 +318,7 @@ def btn_login(context, url, text=_('Login'), icon='login', icon_position=IconPos
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_logout(context, url, text=_('Logout'), icon='logout', icon_position=IconPosition.RIGHT,
-              btn_css_color='btn-default', **kwargs):
+               btn_css_color='btn-default', **kwargs):
     """
     Renders a ``Logout`` button
 
