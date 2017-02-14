@@ -273,7 +273,7 @@ def btn_search(context, url, text=_('Search'), icon='search', icon_position=Icon
 
     :returns: Render-able dict
     """
-    return btn_button(url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs)
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
