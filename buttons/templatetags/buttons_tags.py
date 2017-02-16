@@ -62,6 +62,7 @@ def btn_button(context, **kwargs):
 
     text = _get_param('text', context, kwargs)
     url = _get_param('url', context, kwargs)
+    _type = _get_param('url', context, kwargs, 'button')
     btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
 
     tooltip = _get_param('tooltip', context, kwargs)
@@ -102,7 +103,7 @@ def btn_button(context, **kwargs):
               # btn informations
               'btn_css_color': btn_css_color,
               'btn_css_extra': btn_css_extra,
-              'btn_type': 'button',
+              'btn_type': _type,
               'btn_id': btn_id,
 
               # `data-*` fields
@@ -258,7 +259,7 @@ def btn_detail(context, url, text=_('Detail'), icon='info', icon_position=IconPo
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
-def btn_search(context, url, text=_('Search'), icon='search', icon_position=IconPosition.RIGHT,
+def btn_search(context, text=_('Search'), icon='search', icon_position=IconPosition.RIGHT,
                btn_css_color='btn-default', **kwargs):
     """
     Renders a `Search` button
@@ -273,7 +274,7 @@ def btn_search(context, url, text=_('Search'), icon='search', icon_position=Icon
 
     :returns: Render-able dict
     """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs)
+    return btn_button(context, type='submit', text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
