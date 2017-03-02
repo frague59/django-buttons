@@ -375,3 +375,22 @@ def btn_delete(context, url, text, icon='trash', icon_position=IconPosition.RIGH
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
+
+
+@register.inclusion_tag('buttons/switch-button.html', takes_context=False)
+def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None):
+    return {'value': value,
+            'switch_icons': switch_icons,
+            'switch_colors': switch_colors,
+            'switch_alts': switch_alts,
+            'title': title}
+
+
+@register.inclusion_tag('buttons/single-button.html', takes_context=False)
+def btn_single(icon, color, alt, title=None):
+    return {'icon': icon,
+            'color': color,
+            'alt': alt,
+            'title': title}
+
+
