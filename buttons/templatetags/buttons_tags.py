@@ -57,12 +57,12 @@ def btn_button(context, **kwargs):
 
     :returns: Render-able dict
     """
-    logger.debug('btn_button() context = %s', context)
-    logger.debug('btn_button() kwargs = %s', kwargs)
+    # logger.debug('btn_button() context = %s', unidecode(context))
+    # logger.debug('btn_button() kwargs = %s', kwargs)
 
     text = _get_param('text', context, kwargs)
     url = _get_param('url', context, kwargs)
-    _type = _get_param('url', context, kwargs, 'button')
+    _type = _get_param('btn_type', context, kwargs, 'button')
     btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
 
     tooltip = _get_param('tooltip', context, kwargs)
@@ -111,9 +111,9 @@ def btn_button(context, **kwargs):
               'data_toggle': data_toggle,
               'data_target': data_target,
               'data_placement': data_placement,
-              }
+              'debug': settings.DEBUG, }
 
-    logger.debug('btn_button() output = %s', output)
+    # logger.debug('btn_button() output = %s', output)
 
     return output
 
@@ -259,13 +259,33 @@ def btn_detail(context, url, text=_('Detail'), icon='info', icon_position=IconPo
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
+def btn_create(context, url, text=_('Create'), icon='plus', icon_position=IconPosition.RIGHT,
+               btn_css_color='btn-primary', **kwargs):
+    """
+    Displays a `Create` button
+
+    :param context: Context data
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Create'
+    :param icon: Button icon, default `plus <http://fontawesome.io/icon/plus/>`_
+    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
+    :param btn_css_color: Base button color, default `btn-primary`
+    :param kwargs: Additional keyword args
+
+    :returns: Render-able dict
+    """
+    logger.debug('btn_create() url = *%s*', url)
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
+                      btn_css_color=btn_css_color, **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_search(context, text=_('Search'), icon='search', icon_position=IconPosition.RIGHT,
                btn_css_color='btn-default', **kwargs):
     """
     Renders a `Search` button
 
     :param context: Context data
-    :param url: **Mandatory** target url
     :param text: Button text, default 'Search'
     :param icon: Button icon, default `search <http://fontawesome.io/icon/search/>`_
     :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
@@ -274,7 +294,8 @@ def btn_search(context, text=_('Search'), icon='search', icon_position=IconPosit
 
     :returns: Render-able dict
     """
-    return btn_button(context, type='submit', text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs)
+    return btn_button(context, type='submit', text=text, icon=icon, icon_position=icon_position,
+                      btn_css_color=btn_css_color, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -392,5 +413,3 @@ def btn_single(icon, color, alt, title=None):
             'color': color,
             'alt': alt,
             'title': title}
-
-
