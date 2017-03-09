@@ -1,0 +1,67 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-03-09 10:16+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: templatetags/buttons_tags.py:122
+msgid "Download"
+msgstr ""
+
+#: templatetags/buttons_tags.py:141
+msgid "Back"
+msgstr ""
+
+#: templatetags/buttons_tags.py:162
+msgid "Link"
+msgstr ""
+
+#: templatetags/buttons_tags.py:183
+msgid "Home"
+msgstr ""
+
+#: templatetags/buttons_tags.py:203
+msgid "Submit"
+msgstr ""
+
+#: templatetags/buttons_tags.py:222
+msgid "List"
+msgstr ""
+
+#: templatetags/buttons_tags.py:242
+msgid "Detail"
+msgstr ""
+
+#: templatetags/buttons_tags.py:262
+msgid "Create"
+msgstr ""
+
+#: templatetags/buttons_tags.py:283
+msgid "Search"
+msgstr ""
+
+#: templatetags/buttons_tags.py:322
+msgid "Login"
+msgstr ""
+
+#: templatetags/buttons_tags.py:342
+msgid "Logout"
+msgstr ""
+
+#: templatetags/buttons_tags.py:362
+msgid "Update"
+msgstr ""
