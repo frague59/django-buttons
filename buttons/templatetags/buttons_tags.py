@@ -155,7 +155,7 @@ def btn_back(context, text=_('Back'), icon='chevron-left', icon_position=IconPos
     :returns: Render-able dict
     """
     return btn_button(context, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
-                      url='javascript:history.btn_back()', **kwargs)
+                      url='javascript:history.back()', **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
