@@ -13,7 +13,7 @@ import logging
 import enum
 from django import template
 from django.conf import settings
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 
 logger = logging.getLogger('buttons.templatetags.buttons_tags')
 
