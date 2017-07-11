@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Template tags to create smart querystrings 
+Template tags to create smart querystrings
 
 :creationdate: 30/03/17 10:31
 :moduleauthor: François GUÉRIN <fguerin@ville-tourcoing.fr>
@@ -46,7 +46,7 @@ def query_string(parser, token):
                            = replace all existing values of name with value(s)
                            + add value(s) to existing values for name
                            - remove value(s) from existing values if present
-                           value is either a literal parameter value 
+                           value is either a literal parameter value
                              or a context variable. If it is a context variable
                              it may also be bound to a list.
         - as <var name>: bind result to context variable instead of injecting in output
@@ -156,7 +156,7 @@ class QueryStringNode(template.Node):
         # Deal with lists only.
         if not isinstance(val, (list, tuple)):
             val = [val]
-        val = [unicode(v) for v in val]
+        val = [str(v) for v in val]
         # Remove
         if op == '-':
             for v in val:
