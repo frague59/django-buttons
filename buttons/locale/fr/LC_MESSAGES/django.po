@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-07-04 15:48+0200\n"
+"PO-Revision-Date: 2017-03-30 11:17+0200\n"
+"Last-Translator: François GUÉRIN <fguerin@ville-tourcoing.fr>\n"
+"Language-Team: \n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.8.11\n"
+
+#: templatetags/buttons_tags.py:122
+msgid "Download"
+msgstr "Télécharger"
+
+#: templatetags/buttons_tags.py:141
+msgid "Back"
+msgstr "Retour"
+
+#: templatetags/buttons_tags.py:162
+msgid "Link"
+msgstr "Lien"
+
+#: templatetags/buttons_tags.py:183
+msgid "Home"
+msgstr "Accueil"
+
+#: templatetags/buttons_tags.py:203
+msgid "Submit"
+msgstr "Valider"
+
+#: templatetags/buttons_tags.py:222
+msgid "List"
+msgstr "Liste"
+
+#: templatetags/buttons_tags.py:242
+msgid "Detail"
+msgstr "Détail"
+
+#: templatetags/buttons_tags.py:262
+msgid "Create"
+msgstr "Ajouter"
+
+#: templatetags/buttons_tags.py:283
+msgid "Search"
+msgstr "Rechercher"
+
+#: templatetags/buttons_tags.py:322
+msgid "Login"
+msgstr "Se connecter"
+
+#: templatetags/buttons_tags.py:342
+msgid "Logout"
+msgstr "Se déconnecter"
+
+#: templatetags/buttons_tags.py:362
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: templatetags/buttons_tags.py:402
+msgid "Next"
+msgstr "Suivant"
+
+#: templatetags/buttons_tags.py:409
+msgid "Previous"
+msgstr "Précédent"

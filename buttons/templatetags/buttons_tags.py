@@ -15,7 +15,7 @@ from django import template
 from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
-logger = logging.getLogger('buttons.buttons_tags')
+logger = logging.getLogger('buttons.templatetags.buttons_tags')
 
 register = template.Library()
 
@@ -154,7 +154,7 @@ def btn_back(context, text=_('Back'), icon='chevron-left', icon_position=IconPos
     :returns: Render-able dict
     """
     return btn_button(context, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
-                      url='javascript:history.btn_back()', **kwargs)
+                      url='javascript:history.back()', **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -395,6 +395,20 @@ def btn_delete(context, url, text, icon='trash', icon_position=IconPosition.RIGH
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html', takes_context=True)
+def btn_next(context, url, text=_('Next'), btn_css_color='btn-default'):
+    logger.debug('btn_next() url = %s', url)
+    return btn_button(context, url=url, icon='chevron-right', text=text, icon_position=IconPosition.RIGHT,
+                      btn_css_color=btn_css_color)
+
+
+@register.inclusion_tag('buttons/button.html', takes_context=True)
+def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
+    logger.debug('btn_previous() url = %s', url)
+    return btn_button(context, url=url, icon='chevron-left', text=text, icon_position=IconPosition.LEFT,
+                      btn_css_color=btn_css_color)
 
 
 @register.inclusion_tag('buttons/switch-button.html', takes_context=False)
