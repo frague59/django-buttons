@@ -57,7 +57,6 @@ def btn_button(context, **kwargs):
 
     :returns: Render-able dict
     """
-    # logger.debug('btn_button() context = %s', unidecode(context))
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
     text = _get_param('text', context, kwargs)
