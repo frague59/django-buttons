@@ -118,6 +118,25 @@ def btn_button(context, **kwargs):
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
+def btn_copy(context, url, text=_('Copy'), icon='copy', icon_position=IconPosition.RIGHT, **kwargs):
+    """
+    Displays a ``copy`` button
+
+    :param context: Context data
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Download'
+    :param icon: Button icon, default `copy <http://fontawesome.io/icon/copy/>`
+    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
+    :param kwargs: Additional keyword args in:
+
+    + `btn_css_class`: Button bootstrap class
+
+    :returns: Render-able dict
+    """
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
+
+
+@register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_download(context, url, text=_('Download'), icon='download', icon_position=IconPosition.RIGHT, **kwargs):
     """
     Displays a ``download`` button
