@@ -8,11 +8,13 @@ Template tags to display buttons in pages
 """
 from __future__ import unicode_literals
 
+import json
 import logging
 
 import enum
 from django import template
 from django.conf import settings
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext_lazy as _
 
 logger = logging.getLogger('buttons.templatetags.buttons_tags')
@@ -35,6 +37,12 @@ def _get_param(key, context, kwargs, default=None):
     return context.get(key) or kwargs.get(key, None) or default
 
 
+def _parse_data(data):
+    if data:
+        return json.loads(data)
+    return None
+
+
 @register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_button(context, **kwargs):
     """
@@ -44,27 +52,24 @@ def btn_button(context, **kwargs):
     :param kwargs: Additional keyword args in:
 
     + `text`: Button text, default 'Button'
+    + `title`: alternative title, used for tooltips for example
     + `url`: Target URL, if needed
     + `icon`: Button icon, default ``None``, from `FontAwesome <http://fontawesome.io/icons/>`_
     + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
     + `btn_css_class`: Button bootstrap class
     + `btn_id`: Button Id
     + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``
-    + `data_dismiss`: Set ``data-dismiss`` HTML attribute
-    + `data_toggle`: Set ``data-toggle`` HTML attribute
-    + `data_placement`: Set ``data-placement`` HTML attribute
-    + `data_target`: Set ``data-target`` HTML attribute
+    + `data`: JSON loadable string
 
     :returns: Render-able dict
     """
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
     text = _get_param('text', context, kwargs)
+    title = _get_param('text', context, kwargs)
     url = _get_param('url', context, kwargs)
     _type = _get_param('btn_type', context, kwargs, 'button')
     btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
-
-    tooltip = _get_param('tooltip', context, kwargs)
 
     icon = _get_param('icon', context, kwargs, settings.BUTTONS_ICON)
 
@@ -79,10 +84,8 @@ def btn_button(context, **kwargs):
     btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
     btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
 
-    data_dismiss = _get_param('data_dismiss', context, kwargs)
-    data_toggle = _get_param('data_toggle', context, kwargs)
-    data_target = _get_param('data_target', context, kwargs)
-    data_placement = _get_param('data_placement', context, kwargs)
+    data = _get_param('data', context, kwargs)
+    data = _parse_data(data)
 
     href_target = _get_param('href_target', context, kwargs)
 
@@ -91,8 +94,8 @@ def btn_button(context, **kwargs):
               'url': url,
               'href_target': href_target,
 
-              # tooltip
-              'tooltip': tooltip,
+              # tooltip text
+              'title': title,
 
               # icon informations
               'icon': icon,
@@ -106,11 +109,9 @@ def btn_button(context, **kwargs):
               'btn_id': btn_id,
 
               # `data-*` fields
-              'data_dismiss': data_dismiss,
-              'data_toggle': data_toggle,
-              'data_target': data_target,
-              'data_placement': data_placement,
-              'debug': settings.DEBUG, }
+              'data': data,
+              'debug': settings.DEBUG,
+              }
 
     # logger.debug('btn_button() output = %s', output)
 
@@ -445,3 +446,14 @@ def btn_single(icon, color, alt, title=None):
             'color': color,
             'alt': alt,
             'title': title}
+
+
+@register.filter
+def expand_data(data):
+    output = []
+    for key, value in data.items():
+        if isinstance(value, bool):
+            value = str(value).lower()
+        output += 'data-%(k)s="%(v)s"' % {'k': key, 'v': value},
+    logger.debug('expand_data(%s) output = %s', data, output)
+    return mark_safe(" ".join(output))
