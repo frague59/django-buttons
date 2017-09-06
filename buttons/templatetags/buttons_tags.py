@@ -8,10 +8,10 @@ Template tags to display buttons in pages
 """
 from __future__ import unicode_literals
 
+import enum
 import json
 import logging
 
-import enum
 from django import template
 from django.conf import settings
 from django.utils.safestring import mark_safe
@@ -432,12 +432,15 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
 
 
 @register.inclusion_tag('buttons/switch-button.html', takes_context=False)
-def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None):
-    return {'value': value,
-            'switch_icons': switch_icons,
-            'switch_colors': switch_colors,
-            'switch_alts': switch_alts,
-            'title': title}
+def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None, id=None):
+    output = {'value': value,
+              'switch_icons': switch_icons,
+              'switch_colors': switch_colors,
+              'switch_alts': switch_alts,
+              'title': title}
+    if id is not None:
+        output.update({'id': id})
+    return output
 
 
 @register.inclusion_tag('buttons/single-button.html', takes_context=False)

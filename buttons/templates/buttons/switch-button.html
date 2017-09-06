@@ -1,5 +1,6 @@
 {% if debug %}<!-- buttons/switch-button.html -->{% endif %}
 {% load fontawesome %}
 <button type="button"
+        {% if id %}id="{{ id }}"{% endif %}
         class="btn btn-{{ value|yesno:switch_colors }} btn-sm "
         title="{{ value|yesno:switch_alts }}">{% fontawesome_icon value|yesno:switch_icons fixed=True %}</button>
