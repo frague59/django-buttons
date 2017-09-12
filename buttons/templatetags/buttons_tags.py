@@ -37,7 +37,7 @@ def _get_param(key, context, kwargs, default=None):
     return context.get(key) or kwargs.get(key, None) or default
 
 
-def _parse_data(data):
+def _loads_data(data):
     if data:
         return json.loads(data)
     return None
@@ -84,10 +84,12 @@ def btn_button(context, **kwargs):
     btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
     btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
 
-    data = _get_param('data', context, kwargs)
-    data = _parse_data(data)
-
     href_target = _get_param('href_target', context, kwargs)
+
+    data = {}
+    for item, value in kwargs.items():
+        if item.startswith('data_'):
+            data[item[5:]] = value
 
     # Dict initialization
     output = {'text': text,
