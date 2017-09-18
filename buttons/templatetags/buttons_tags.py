@@ -33,14 +33,15 @@ class IconPosition(enum.Enum):
     NONE = 'NONE'
 
 
-def _get_param(key, context, kwargs, default=None):
-    return context.get(key) or kwargs.get(key, None) or default
+def get_param(key, kwargs, context, default=None):
 
+    if kwargs.get(key, None) is not None:
+        return kwargs.pop(key)
 
-def _loads_data(data):
-    if data:
-        return json.loads(data)
-    return None
+    if context.get(key, None) is not None:
+        return context.get(key)
+
+    return default
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -65,31 +66,32 @@ def btn_button(context, **kwargs):
     """
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
-    text = _get_param('text', context, kwargs)
-    title = _get_param('text', context, kwargs)
-    url = _get_param('url', context, kwargs)
-    _type = _get_param('btn_type', context, kwargs, 'button')
-    btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
+    text = get_param('text', kwargs, context)
+    title = get_param('text', kwargs, context)
+    url = get_param('url', kwargs, context)
+    _type = get_param('btn_type', kwargs, context, 'button')
+    btn_id = get_param('id', kwargs, context) or get_param('btn_id', kwargs, context)
 
-    icon = _get_param('icon', context, kwargs, settings.BUTTONS_ICON)
+    icon = get_param('icon', kwargs, context, settings.BUTTONS_ICON)
 
-    icon_position = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_POSITION)
+    icon_position = get_param('icon_position', kwargs, context, settings.BUTTONS_ICON_POSITION)
     if isinstance(icon_position, IconPosition):
         icon_position = icon_position.value
     else:
         icon_position = icon_position.upper()
 
-    icon_css_extra = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_CSS_EXTRA)
+    icon_css_extra = get_param('icon_position', kwargs, context, settings.BUTTONS_ICON_CSS_EXTRA)
 
-    btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
-    btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
+    btn_css_color = get_param('btn_css_color', kwargs, context, settings.BUTTONS_BTN_CSS_COLOR)
+    btn_css_extra = get_param('btn_css_extra', kwargs, context, settings.BUTTONS_BTN_CSS_EXTRA)
 
-    href_target = _get_param('href_target', context, kwargs)
+    href_target = get_param('href_target', kwargs, context)
 
     data = {}
     for item, value in kwargs.items():
         if item.startswith('data_'):
             data[item[5:]] = value
+            kwargs.pop('data_' + item[5:])
 
     # Dict initialization
     output = {'text': text,
@@ -180,7 +182,7 @@ def btn_back(context, text=_('Back'), icon='chevron-left', icon_position=IconPos
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
-def btn_link(context, url, text=_('Link'), icon='btn_link', icon_position=IconPosition.LEFT,
+def btn_link(context, url, text=_('Link'), icon='link', icon_position=IconPosition.RIGHT,
              btn_css_color='btn-default', **kwargs):
     """
     Displays a simple ``link`` btn_button
