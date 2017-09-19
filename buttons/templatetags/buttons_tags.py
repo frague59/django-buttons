@@ -91,7 +91,6 @@ def btn_button(context, **kwargs):
     for item, value in kwargs.items():
         if item.startswith('data_'):
             data[item[5:]] = value
-            kwargs.pop('data_' + item[5:])
 
     # Dict initialization
     output = {'text': text,
