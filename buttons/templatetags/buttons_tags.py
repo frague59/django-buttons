@@ -67,7 +67,7 @@ def btn_button(context, **kwargs):
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
     text = get_param('text', kwargs, context)
-    title = get_param('text', kwargs, context)
+    title = get_param('title', kwargs, context)
     url = get_param('url', kwargs, context)
     _type = get_param('btn_type', kwargs, context, 'button')
     btn_id = get_param('id', kwargs, context) or get_param('btn_id', kwargs, context)
