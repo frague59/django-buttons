@@ -1,3 +1,5 @@
+[![pipeline status](http://gitlab.ville.tg/fguerin/django-buttons/badges/master/pipeline.svg)](http://gitlab.ville.tg/fguerin/django-buttons/commits/master)
+
 # django-buttons
 
 This application provides some simple template tags to insert some
