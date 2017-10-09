@@ -6,7 +6,7 @@ stages:
 sonar:
   stage: sonar
   before_script:
-  - apt-get --yes -qq update && apt-get --yes -qq install zip apache2-dev
+  - apt-get --yes -qq update && apt-get --yes -qq install zip
   # Installs sonar-runner ZIP file
   - if [[ ! -d sonar-scanner-3.0.3.778-linux ]]; then
   -     wget --no-verbose https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip
@@ -26,6 +26,7 @@ sonar:
   - sonar-scanner-3.0.3.778-linux/bin/sonar-scanner -Dsonar.host.url="http://ulysse.ville.tg:9000"
   cache:
     paths:
+    - sonar-scanner-cli-3.0.3.778-linux.zip
     - sonar-scanner-3.0.3.778-linux/
     - .pip/
     - .scannerwork/
