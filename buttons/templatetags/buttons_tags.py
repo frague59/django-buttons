@@ -435,7 +435,10 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
 
 
 @register.inclusion_tag('buttons/switch-button.html', takes_context=False)
-def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None, id=None):
+def btn_switch(value, switch_alts,
+               switch_icons="toggle-on,toggle-off",
+               switch_colors="success,danger",
+               title=None, id=None, **kwargs):
     output = {'value': value,
               'switch_icons': switch_icons,
               'switch_colors': switch_colors,
@@ -443,6 +446,14 @@ def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None, id=N
               'title': title}
     if id is not None:
         output.update({'id': id})
+
+    data = {}
+    for item, value in kwargs.items():
+        if item.startswith('data_'):
+            data[item[5:]] = value
+    if data:
+        output.update({'data': data})
+
     return output
 
 

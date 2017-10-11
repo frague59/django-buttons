@@ -1,3 +1,11 @@
 {% if debug %}<!-- buttons/switch-button.html -->{% endif %}
-{% load fontawesome %}
-<span class="text-{{ value|yesno:switch_colors }} fa-2x" {% if id %}id="{{ id }}"{% endif %}><span class="sr-only">{{ value|yesno:switch_alts }}</span>{% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}</span>
+{% load fontawesome buttons_tags %}
+{% spaceless %}
+<span
+        class="text-{{ value|yesno:switch_colors }} fa-2x"
+        {% if id %}id="{{ id }}"{% endif %}
+        {{ data|expand_data }}>
+    <span class="sr-only">{{ value|yesno:switch_alts }}</span>
+    {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
+</span>
+{% endspaceless %}
