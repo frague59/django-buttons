@@ -438,13 +438,17 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
 def btn_switch(value, switch_alts, large=True,
                switch_icons="toggle-on,toggle-off",
                switch_colors="success,danger",
-               title=None, id=None, **kwargs):
+               switch_url=None,
+               title=None,
+               id=None,
+               **kwargs):
     output = {'value': value,
               'switch_icons': switch_icons,
               'switch_colors': switch_colors,
               'switch_alts': switch_alts,
               'large': large,
-              'title': title}
+              'title': title,
+              'switch_url': switch_url}
     if id is not None:
         output.update({'id': id})
 
@@ -468,6 +472,9 @@ def btn_single(icon, color, alt, title=None):
 
 @register.filter
 def expand_data(data):
+    if not data:
+        return ''
+
     output = []
     for key, value in data.items():
         if isinstance(value, bool):

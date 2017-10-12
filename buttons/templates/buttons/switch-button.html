@@ -1,35 +1,36 @@
 {% if debug %}<!-- buttons/switch-button.html -->{% endif %}
 {% load fontawesome buttons_tags %}
 {% spaceless %}
-<span
-        class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }}"
-        {% if id %}id="{{ id }}"{% endif %}
-        {{ data|expand_data }}>
+    {% with color_true=True|yesno:switch_colors color_false=False|yesno:switch_colors icon_true=True|yesno:switch_icons icon_false=False|yesno:switch_icons alt_true=True|yesno:switch_alts alt_false=False|yesno:switch_alts %}
+        <span class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }} btn-switch"
+              {% if id %}id="{{ id }}"{% endif %}
+              data-value="{{ value|escapejs }}"
+              data-url="{{ switch_url }}"
+              {{ data|expand_data }}>
     <span class="sr-only">{{ value|yesno:switch_alts }}</span>
     {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
 </span>
-<script>
-    $(document).ready(function(){
-        var $btn = $('#{{ id }}');
-        if ($btn.length <= 0) {
-            return;
-        }
+        <script>
+            $(document).ready(function () {
+                const colors = ["{{ color_false|escapejs }}", "{{ color_true|escapejs }}"];
+                const icons = ["{{ icon_false|escapejs }}", "{{ icon_true|escapejs }}"];
+                const alts = ["{{ alt_false|escapejs }}", "{{ alt_true|escapejs }}"];
 
-        var func_name = function($btn) {
-            var id = $btn.attr('id');
-            var output = id.replace('-', '_') + '_Switch';
-            return output;
-        };
+                var $btn = $('#{{ id }}');
+                if ($btn.length <= 0) {
+                    return;
+                }
 
-        $('#{{ id }}').click(function(evt){
-            evt.preventDefault();
-            var _func_name = func_name($(this));
-            if (typeof window[_func_name] === 'undefined') {
-                console.error('switch-button.html Unable to find function {0}'.format(_func_name));
-                return;
-            }
-            window[_func_name]();
-        });
-    });
-</script>
+                $('#{{ id }}').click(function (evt) {
+                    evt.preventDefault();
+                    var _func_name = func_name($(this));
+                    if (typeof window[_func_name] === 'undefined') {
+                        console.error('switch-button.html Unable to find function {0}'.format(_func_name));
+                        return;
+                    }
+                    window[_func_name]($btn, colors, icons, alts);
+                });
+            });
+        </script>
+    {% endwith %}
 {% endspaceless %}
