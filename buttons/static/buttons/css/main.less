@@ -1,0 +1,21 @@
+/** Cascading stylesheets for switch icons */
+/*# sourceMappingURL=main.map */
+
+.switch {
+    white-space: nowrap;
+    cursor: hand;
+
+    & .switch-title {
+        &::before {
+            content: ' ';
+        }
+
+        &:hover,
+        &:focus,
+        &:active,
+        &.active {
+            text-decoration: underline;
+            cursor: hand;
+        }
+    }
+}

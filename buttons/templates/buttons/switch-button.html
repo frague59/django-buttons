@@ -2,14 +2,14 @@
 {% load fontawesome buttons_tags %}
 {% spaceless %}
     {% with color_true=True|yesno:switch_colors color_false=False|yesno:switch_colors icon_true=True|yesno:switch_icons icon_false=False|yesno:switch_icons alt_true=True|yesno:switch_alts alt_false=False|yesno:switch_alts %}
-        <span class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }} btn-switch"
-              {% if id %}id="{{ id }}"{% endif %}
+        <span {% if id %}id="{{ id }}"{% endif %} class="switch"
               data-value="{{ value|escapejs }}"
-              data-url="{{ switch_url }}"
-              {{ data|expand_data }}>
-    <span class="sr-only">{{ value|yesno:switch_alts }}</span>
-    {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
-</span>
+              data-url="{{ switch_url }}" {{ data|expand_data }}>
+            <span class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }} switch-icon">
+            {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
+            </span>
+            <span class="switch-title {% if hide_prefix %}sr-only{% endif %}">{{ title }}</span>
+        </span>
         <script>
             $(document).ready(function () {
                 const colors = ["{{ color_false|escapejs }}", "{{ color_true|escapejs }}"];
@@ -23,12 +23,12 @@
 
                 $('#{{ id }}').click(function (evt) {
                     evt.preventDefault();
-                    var _func_name = func_name($(this));
-                    if (typeof window[_func_name] === 'undefined') {
+                    var _func_name = switchButtons.getSwitchFunctionName($(this));
+                    if (typeof switchButtons[_func_name] === 'undefined') {
                         console.error('switch-button.html Unable to find function {0}'.format(_func_name));
                         return;
                     }
-                    window[_func_name]($btn, colors, icons, alts);
+                    switchButtons[_func_name]($btn, colors, icons, alts);
                 });
             });
         </script>
