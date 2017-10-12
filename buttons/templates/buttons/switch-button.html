@@ -2,10 +2,34 @@
 {% load fontawesome buttons_tags %}
 {% spaceless %}
 <span
-        class="text-{{ value|yesno:switch_colors }} fa-2x"
+        class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }}"
         {% if id %}id="{{ id }}"{% endif %}
         {{ data|expand_data }}>
     <span class="sr-only">{{ value|yesno:switch_alts }}</span>
     {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
 </span>
+<script>
+    $(document).ready(function(){
+        var $btn = $('#{{ id }}');
+        if ($btn.length <= 0) {
+            return;
+        }
+
+        var func_name = function($btn) {
+            var id = $btn.attr('id');
+            var output = id.replace('-', '_') + '_Switch';
+            return output;
+        };
+
+        $('#{{ id }}').click(function(evt){
+            evt.preventDefault();
+            var _func_name = func_name($(this));
+            if (typeof window[_func_name] === 'undefined') {
+                console.error('switch-button.html Unable to find function {0}'.format(_func_name));
+                return;
+            }
+            window[_func_name]();
+        });
+    });
+</script>
 {% endspaceless %}
