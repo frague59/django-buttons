@@ -5,16 +5,7 @@
     white-space: nowrap;
     cursor: pointer;
 
-    & .switch-title {
-        &::before {
-            content: ' ';
-        }
-
-        &:hover,
-        &:focus,
-        &:active,
-        &.active {
-            text-decoration: underline;
-        }
+    & .switch-title:::before {
+        content: ' ';
     }
 }

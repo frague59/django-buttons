@@ -7,10 +7,4 @@
 .switch .switch-title::before {
   content: ' ';
 }
-.switch .switch-title:hover,
-.switch .switch-title:focus,
-.switch .switch-title:active,
-.switch .switch-title.active {
-  text-decoration: underline;
-}
 /*# sourceMappingURL=main.map */
