@@ -10,6 +10,10 @@ cache:
 
 variables:
   SCANER_VERSION: 3.0.3.778-linux
+  DEBUG_BEFORE: 0
+  DEBUG_SONAR: 0
+  DEBUG_SPHINX: 0
+  SONAR_HOST: "http://sonarqube.ville.tg/"
 
 sonar:
   stage: sonar
@@ -33,7 +37,7 @@ sonar:
   # Runs the sonar-runner
   - export SONAR_SCANNER_OPTS="-Xmx512m"
   - export SONAR_USER_HOME=.
-  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url="http://ulysse.ville.tg:9000"
+  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url=$SONAR_HOST
   cache:
     paths:
     - sonar-scanner-cli-$SCANER_VERSION.zip
@@ -52,6 +56,7 @@ package:
     paths:
     - dist/
 
+# Builds sphinx docs
 pages:
   stage: build
   before_script:
@@ -63,9 +68,14 @@ pages:
   - pip install --cache-dir .pip/
       --requirement requirements/docs.txt --constraint requirements/constraints.txt
   script:
+  # Builds docs
   - cd docs
+  - test $DEBUG_SPHINX -eq 1 && ls -la
   - make html
-  - mv build/html/ public/
+  - cd ..
+
+  # Copy built files to /public
+  - mv docs/build/html/ public/
   artifacts:
     paths:
     - public/
