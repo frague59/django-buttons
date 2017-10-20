@@ -18,3 +18,6 @@ logger = logging.getLogger('buttons.apps')
 class ButtonsAppConfig(AppConfig):
     name = 'buttons'
 
+    def ready(self):
+        # noinspection PyUnresolvedReferences
+        from buttons.conf import ButtonsAppConf
