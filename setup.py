@@ -21,9 +21,9 @@ setup(
                  ],
     install_requires=['django', 'django-fontawesome', 'django-appconf'],
     include_package_data=True,
-    packages_data={"docs/": ["*.txt", "*.rst", "*.py", ],
-                   './static': ['*.js', '*.less', '*.map', '*.css'],
-                   './templates': ['*.html'],
+    packages_data={"./docs/": ["*.txt", "*.rst", "*.py", ],
+                   './static/': ['*.js', '*.less', '*.map', '*.css'],
+                   './templates/': ['*.html'],
                    },
 
 )
