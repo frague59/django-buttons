@@ -5,8 +5,8 @@
 This application provides some simple template tags to insert some
 buttons into templates.
 
--   Documentation :
-    [<http://ulysse.ville.tg/docs/django-buttons/>](http://ulysse.ville.tg/docs/django-buttons/)
++ Documentation technique : https://fguerin.docs.tourcoing.fr/django-buttons/
+    
 
 ## Installation
 

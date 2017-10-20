@@ -56,6 +56,8 @@ pages:
   - pip install --cache-dir .pip/
       --requirement ./requirements/requirements.txt --constraint ./requirements/constraints.txt
   script:
+  - pip install --cache-dir .pip/
+      --requirement ./requirements/docs.txt --constraint ./requirements/constraints.txt
   - cd docs
   - make html
   - mv build/html/ public/
