@@ -23,10 +23,12 @@ sonar:
   - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner --version
   # Installs pip requirements
   - test ! -d .pip && mkdir .pip
-  - pip install --cache-dir .pip/ pylint pylint-django
   - if [[ -f requirements/common.txt ]] && [[ -f requirements/constraints.txt ]]; then
-  -     pip install --cache-dir .pip/ --requirement requirements/common.txt --constraint requirements/constraints.txt;
+  -     pip install --cache-dir .pip/
+          --requirement requirements/common.txt --constraint requirements/constraints.txt;
   - fi
+  - pip install --cache-dir .pip/
+      --requirement requirements/sonar.txt --constraint requirements/constraints.txt
   script:
   # Runs the sonar-runner
   - export SONAR_SCANNER_OPTS="-Xmx512m"
@@ -53,11 +55,14 @@ package:
 pages:
   stage: build
   before_script:
+  - test ! -d .pip && mkdir .pip
+  - if [[ -f requirements/common.txt ]] && [[ -f requirements/constraints.txt ]]; then
+  -     pip install --cache-dir .pip/
+          --requirement requirements/common.txt --constraint requirements/constraints.txt;
+  - fi
   - pip install --cache-dir .pip/
-      --requirement ./requirements/requirements.txt --constraint ./requirements/constraints.txt
+      --requirement requirements/docs.txt --constraint requirements/constraints.txt
   script:
-  - pip install --cache-dir .pip/
-      --requirement ./requirements/docs.txt --constraint ./requirements/constraints.txt
   - cd docs
   - make html
   - mv build/html/ public/
