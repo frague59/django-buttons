@@ -1,5 +1,6 @@
-# Includes LICENCE.txt
-include LICENCE.txt
+# Includes LICENCE
+include LICENCE
+include README.md
 
 # Include template files
 recursive-include buttons/templates *
@@ -9,3 +10,4 @@ recursive-include buttons/locale *
 
 # Exclude docs directory
 prune docs
+

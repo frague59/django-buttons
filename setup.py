@@ -10,13 +10,14 @@ setup(
     author='François GUÉRIN',
     author_email='fguerin@ville-tourcoing.fr',
     url='https://github.com/frague59/django-buttons',
-    download_url='https://github.com/frague59/django-buttons/tarball/0.1',
-    keywords=['django'],
-    classifiers=['Development Status :: 4 - Beta',
+    # download_url='https://gitlab.ville.tg/fguerin/',
+    keywords=('django',
+              'buttons',
+              'bootstrap3'),
+    classifiers=('Development Status :: 4 - Beta',
                  'Framework :: Django',
                  'Intended Audience :: Developers',
                  'License :: OSI Approved :: MIT License',
-
-                 ],
-    requires=['django', 'django-fontawesome', 'django-appconf']
+                 ),
+    requires=('django', 'django-fontawesome', 'django-appconf')
 )
