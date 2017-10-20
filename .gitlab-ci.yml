@@ -8,16 +8,19 @@ cache:
   paths:
   - .pip/
 
+variables:
+  SCANER_VERSION: 3.0.3.778-linux
+
 sonar:
   stage: sonar
   before_script:
   - apt-get --yes -qq update && apt-get --yes -qq install zip
   # Installs sonar-runner ZIP file
-  - if [[ ! -d sonar-scanner-3.0.3.778-linux ]]; then
-  -     wget --no-verbose https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.0.3.778-linux.zip
-  -     unzip -q sonar-scanner-cli-3.0.3.778-linux.zip
+  - if [[ ! -d sonar-scanner-$SCANER_VERSION ]]; then
+  -     wget --no-verbose https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SCANER_VERSION.zip
+  -     unzip -q sonar-scanner-cli-$SCANER_VERSION.zip
   - fi
-  - sonar-scanner-3.0.3.778-linux/bin/sonar-scanner --version
+  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner --version
   # Installs pip requirements
   - test ! -d .pip && mkdir .pip
   - pip install --cache-dir .pip/ pylint pylint-django
@@ -28,11 +31,11 @@ sonar:
   # Runs the sonar-runner
   - export SONAR_SCANNER_OPTS="-Xmx512m"
   - export SONAR_USER_HOME=.
-  - sonar-scanner-3.0.3.778-linux/bin/sonar-scanner -Dsonar.host.url="http://ulysse.ville.tg:9000"
+  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url="http://ulysse.ville.tg:9000"
   cache:
     paths:
-    - sonar-scanner-cli-3.0.3.778-linux.zip
-    - sonar-scanner-3.0.3.778-linux/
+    - sonar-scanner-cli-$SCANER_VERSION.zip
+    - sonar-scanner-$SCANER_VERSION/
     - .scannerwork/
   tags:
   - sonar
@@ -46,3 +49,16 @@ package:
   artifacts:
     paths:
     - dist/
+
+pages:
+  stage: build
+  before_script:
+  - pip install --cache-dir .pip/
+      --requirement ./requirements/requirements.txt --constraint ./requirements/constraints.txt
+  script:
+  - cd docs
+  - make html
+  - mv build/html/ public/
+  artifacts:
+    paths:
+    - public/
