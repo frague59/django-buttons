@@ -2,12 +2,12 @@
 include LICENCE
 include README.md
 
-# Include template files
+# Include template / static / docs files
 recursive-include buttons/templates *
+recursive-include buttons/static *
+recursive-include buttons/docs *
 
 # Include i18n files
 recursive-include buttons/locale *
 
-# Exclude docs directory
-prune docs
 
