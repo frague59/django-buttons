@@ -16,17 +16,13 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
 import sys
-
+import os
 import sphinx_rtd_theme
 
-sys.path.insert(0, os.path.abspath('../../buttons'))
-sys.path.insert(0, os.path.abspath('./virtualenv/lib/python2.7/site-packages'))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'intranet.settings.dev')
-import django
-
-django.setup()
+sys.path.insert(0, os.path.abspath('..'))
+from django.conf import settings
+settings.configure()
 
 # -- General configuration ------------------------------------------------
 
@@ -162,7 +158,7 @@ texinfo_documents = [
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'python': ('https://docs.python.org/', None),
-                       'django': ('http://docs.djangoproject.com/en/1.10/',
-                                  'https://docs.djangoproject.com/en/1.10/_objects/'),
+                       'django': ('http://docs.djangoproject.com/en/latest/',
+                                  'https://docs.djangoproject.com/en/latest/_objects/'),
                        'appconf': ('https://django-appconf.readthedocs.io/en/latest/', None),
                        'fontawesome': ('https://github.com/redouane/django-fontawesome/', None), }

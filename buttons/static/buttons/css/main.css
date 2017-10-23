@@ -1,0 +1,10 @@
+/** Cascading stylesheets for switch icons */
+/*# sourceMappingURL=main.map */
+.switch {
+  white-space: nowrap;
+  cursor: pointer;
+}
+.switch .switch-title::before {
+  content: ' ';
+}
+/*# sourceMappingURL=main.map */
