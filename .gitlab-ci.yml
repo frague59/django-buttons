@@ -54,7 +54,7 @@ release:
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
   - python3 setup.py bdist_wheel
-  - twine upload --config-file .pypirc --repository ${TARGET_REPO} --skip-existing dist/*
+  - twine upload --config-file ./.pypirc --repository ${TARGET_REPO} --skip-existing dist/*
   artifacts:
     paths:
     - dist/
