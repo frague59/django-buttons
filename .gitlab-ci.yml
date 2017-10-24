@@ -51,7 +51,7 @@ release:
   before_script:
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
-  - python3 setup.py sdist --formats=gztar,zip
+  - python3 setup.py sdist upload -r pypitest --formats=gztar,zip
   artifacts:
     paths:
     - dist/
