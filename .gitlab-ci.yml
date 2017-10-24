@@ -10,7 +10,7 @@ variables:
   DEBUG_SONAR: 0
   DEBUG_SPHINX: 0
   SONAR_HOST: "http://sonarqube.ville.tg/"
-  TARGET_REPO: pypitest
+  TARGET_REPO: pypi
 
 sonar:
   stage: sonar
