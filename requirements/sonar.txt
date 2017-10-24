@@ -1,2 +1,2 @@
-pylint
 pylint-django
+pylint

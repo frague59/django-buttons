@@ -7,7 +7,7 @@ stages:
 variables:
   SCANER_VERSION: 3.0.3.778-linux
   DEBUG_BEFORE: 0
-  DEBUG_SONAR: 0
+  DEBUG_SONAR: 1
   DEBUG_SPHINX: 0
   SONAR_HOST: "http://sonarqube.ville.tg/"
 
@@ -32,6 +32,7 @@ sonar:
 
   script:
   # Runs the sonar-runner
+  - test ${DEBUG_SONAR} -eq 1 && pylint --version
   - export SONAR_SCANNER_OPTS="-Xmx512m"
   - export SONAR_USER_HOME=.
   - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url=$SONAR_HOST
