@@ -4,10 +4,6 @@ stages:
   - build
   - sonar
 
-cache:
-  paths:
-  - .pip/
-
 variables:
   SCANER_VERSION: 3.0.3.778-linux
   DEBUG_BEFORE: 0
@@ -34,23 +30,26 @@ sonar:
   - fi
   - pip install --cache-dir .pip/
       --requirement requirements/sonar.txt --constraint requirements/constraints.txt
+
   script:
   # Runs the sonar-runner
   - export SONAR_SCANNER_OPTS="-Xmx512m"
   - export SONAR_USER_HOME=.
   - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url=$SONAR_HOST
+
   cache:
     paths:
     - sonar-scanner-cli-$SCANER_VERSION.zip
     - sonar-scanner-$SCANER_VERSION/
     - .scannerwork/
+    - .pip/
+
   tags:
   - sonar
 
 # Builds wheel and upload to pypi[test]
 release:
   stage: build
-  variables:
   before_script:
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
@@ -59,6 +58,9 @@ release:
   artifacts:
     paths:
     - dist/
+  cache:
+    paths:
+    - .pip/
 
 # Builds sphinx docs
 pages:
@@ -83,3 +85,7 @@ pages:
   artifacts:
     paths:
     - public/
+
+  cache:
+    paths:
+    - .pip/
