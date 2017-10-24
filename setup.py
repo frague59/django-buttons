@@ -1,11 +1,16 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+import sys
+import os
 from distutils.core import setup
 from setuptools import find_packages
 
+sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
+import buttons
+
 setup(
     name='django-buttons',
-    version='0.2',
+    version=buttons.VERSION,
     description='An application providing some template tags to add buttons to pages',
     author='François GUÉRIN',
     author_email='fguerin@ville-tourcoing.fr',

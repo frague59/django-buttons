@@ -46,12 +46,12 @@ sonar:
   tags:
   - sonar
 
-package:
+release:
   stage: build
   before_script:
-  - pip install --cache-dir .pip/ --upgrade pip setuptools wheel
+  - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
-  - python setup.py sdist --formats=gztar,zip
+  - python3 setup.py sdist --formats=gztar,zip
   artifacts:
     paths:
     - dist/
