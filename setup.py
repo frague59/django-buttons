@@ -5,12 +5,13 @@ import os
 from distutils.core import setup
 from setuptools import find_packages
 
+# Loads the version from package
 sys.path.append(os.path.join(os.path.dirname(__file__), '.'))
-import buttons
+from buttons import __version__ as version
 
 setup(
     name='django-buttons',
-    version=buttons.VERSION,
+    version=version,
     description='An application providing some template tags to add buttons to pages',
     author='François GUÉRIN',
     author_email='fguerin@ville-tourcoing.fr',

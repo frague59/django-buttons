@@ -48,10 +48,14 @@ sonar:
 
 release:
   stage: build
-  before_script:
+  variables:
+    TARGET_REPO:
+  before_script: pypitest
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
-  - python3 setup.py sdist upload -r pypitest --formats=gztar,zip
+  - python3 setup.py bdist_wheel
+  - twine upload --config-file .pypirc --repository ${TARGET_REPO} dist/*
+
   artifacts:
     paths:
     - dist/
