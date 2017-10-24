@@ -49,8 +49,8 @@ sonar:
 release:
   stage: build
   variables:
-    TARGET_REPO:
-  before_script: pypitest
+    TARGET_REPO: pypitest
+  before_script:
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
   - python3 setup.py bdist_wheel
