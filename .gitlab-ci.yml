@@ -14,6 +14,7 @@ variables:
   DEBUG_SONAR: 0
   DEBUG_SPHINX: 0
   SONAR_HOST: "http://sonarqube.ville.tg/"
+  TARGET_REPO: pypitest
 
 sonar:
   stage: sonar
@@ -46,16 +47,15 @@ sonar:
   tags:
   - sonar
 
+# Builds wheel and upload to pypi[test]
 release:
   stage: build
   variables:
-    TARGET_REPO: pypitest
   before_script:
   - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
   script:
   - python3 setup.py bdist_wheel
   - twine upload --config-file .pypirc --repository ${TARGET_REPO} dist/*
-
   artifacts:
     paths:
     - dist/
