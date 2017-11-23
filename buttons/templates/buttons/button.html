@@ -25,7 +25,8 @@
                     {% if title %}title="{{ title }}" aria-label="{{ title }}"{% endif %}
                     class="btn {{ btn_css_color }} {{ btn_css_extra }}"
                     {% if data %}{{ data|expand_data }}{% endif %}>
-
+                    {% if name %}name="{{ name }}"{% endif %}
+                    {% if value %}value="{{ value }}"{% endif %}
                 {% if licon_position == 'LEFT' %}
                     {% fontawesome_icon icon %}&nbsp;{{ text }}
                 {% elif licon_position == 'RIGHT' %}

@@ -81,6 +81,9 @@ def btn_button(context, **kwargs):
     _type = get_param('btn_type', kwargs, context, 'button')
     btn_id = get_param('id', kwargs, context) or get_param('btn_id', kwargs, context)
 
+    name = kwargs.get('name', None)
+    value = kwargs.get('value', None)
+
     icon = get_param('icon', kwargs, context, settings.BUTTONS_ICON)
 
     icon_position = get_param('icon_position', kwargs, context, settings.BUTTONS_ICON_POSITION)
@@ -124,8 +127,12 @@ def btn_button(context, **kwargs):
               'data': data,
               'debug': settings.DEBUG,
               }
+    if name:
+        output.update({'name': name})
+    if value:
+        output.update({'value': value})
 
-    # logger.debug('btn_button() output = %s', output)
+    logger.debug('btn_button() output = %s', output)
 
     return output
 
