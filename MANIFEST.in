@@ -3,5 +3,5 @@ include LICENCE
 include README.rst
 include CHANGELOG.md
 # Files
-include templates/*
-include static/*
+recursive-include templates *
+recursive-include static *
