@@ -3,5 +3,3 @@
 
 # 0.4.0b1 2017-11-23  
 + Add support for `name` and `value` on (submit) buttons
-
-
