@@ -30,9 +30,6 @@ setup(
 
     # Includes static files
     include_package_data=True,
-    packages_data={"docs": ["*", ],
-                   'static': ["*", ],
-                   'templates': ["*", ]},
 
 )
 
