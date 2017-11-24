@@ -3,7 +3,6 @@ include LICENCE
 include README.rst
 include CHANGELOG.md
 # Files
-recursive-include templates *
-recursive-include static *
+recursive-include docs *
 recursive-include buttons/templates *
 recursive-include buttons/static *
