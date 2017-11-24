@@ -1,3 +1,6 @@
+# 0.4.0b4 2017-11-24  
++ Include package files   
+
 # 0.4.0b2 2017-11-24  
 + Fixes buggy template for `name` and `value` support  
 
