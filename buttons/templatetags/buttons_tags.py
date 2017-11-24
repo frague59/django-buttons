@@ -128,9 +128,9 @@ def btn_button(context, **kwargs):
               'debug': settings.DEBUG,
               }
     if name:
-        output.update({'name': name})
+        output.update({'btn_name': name})
     if value:
-        output.update({'value': value})
+        output.update({'btn_value': value})
 
     logger.debug('btn_button() output = %s', output)
 
