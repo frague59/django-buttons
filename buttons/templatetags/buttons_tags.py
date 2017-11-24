@@ -83,8 +83,8 @@ def btn_button(context, **kwargs):
     _type = get_param('btn_type', kwargs, context, 'button')
     btn_id = get_param('id', kwargs, context) or get_param('btn_id', kwargs, context)
 
-    name = kwargs.get('name', None)
-    value = kwargs.get('value', None)
+    btn_name = kwargs.get('btn_name', None)
+    btn_value = kwargs.get('btn_value', None)
 
     icon = get_param('icon', kwargs, context, settings.BUTTONS_ICON)
 
@@ -102,9 +102,9 @@ def btn_button(context, **kwargs):
     href_target = get_param('href_target', kwargs, context)
 
     data = {}
-    for item, value in kwargs.items():
+    for item, btn_value in kwargs.items():
         if item.startswith('data_'):
-            data[item[5:]] = value
+            data[item[5:]] = btn_value
 
     # Dict initialization
     output = {'text': text,
@@ -129,10 +129,12 @@ def btn_button(context, **kwargs):
               'data': data,
               'debug': settings.DEBUG,
               }
-    if name:
-        output.update({'btn_name': name})
-    if value:
-        output.update({'btn_value': value})
+
+    if btn_name:
+        output.update({'btn_name': btn_name})
+
+    if btn_value:
+        output.update({'btn_value': btn_value})
 
     logger.debug('btn_button() output = %s', output)
 
