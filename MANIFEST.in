@@ -5,3 +5,5 @@ include CHANGELOG.md
 # Files
 recursive-include templates *
 recursive-include static *
+recursive-include buttons/templates *
+recursive-include buttons/static *
