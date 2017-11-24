@@ -70,6 +70,8 @@ def btn_button(context, **kwargs):
     + `btn_id`: Button Id
     + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``
     + `data`: JSON loadable string
+    + `btn_name`: html element attribute `name="{{ btn_name }}"`
+    + `btn_value`: html element attribute `value="{{ btn_value }}"`
 
     :returns: Render-able dict
     """
