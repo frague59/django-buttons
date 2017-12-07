@@ -6,3 +6,4 @@ include CHANGELOG.md
 recursive-include docs *
 recursive-include buttons/templates *
 recursive-include buttons/static *
+recursive-include buttons/locale *
