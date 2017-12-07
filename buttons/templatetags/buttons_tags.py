@@ -9,7 +9,6 @@ Template tags to display buttons in pages
 from __future__ import unicode_literals
 
 import enum
-import json
 import logging
 
 from django import template
@@ -477,7 +476,7 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
 
 @register.inclusion_tag('buttons/switch-button.html', takes_context=False)
 def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-off", switch_colors="success,danger",
-               switch_url=None, title=None, id=None, **kwargs):
+               switch_url=None, title=None, btn_id=None, **kwargs):
     """
     Renders a switch button. When ckicked, an ajax request is sent to server, and the value is possibly changed.
 
@@ -488,7 +487,7 @@ def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-of
     :param switch_colors: Colors used to display the icon, in order "yes, No"
     :param switch_url: Address to invoke to swirch the value.
     :param title: Main title in the button.
-    :param id: Identifier for the button
+    :param btn_id: Identifier for the button
     :param kwargs: Additional kwargs
 
     :returns: Render-able dict
@@ -500,8 +499,8 @@ def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-of
               'large': large,
               'title': title,
               'switch_url': switch_url}
-    if id is not None:
-        output.update({'id': id})
+    if btn_id is not None:
+        output.update({'id': btn_id})
 
     data = {}
     for item, value in kwargs.items():

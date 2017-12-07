@@ -121,7 +121,7 @@ class QueryStringNode(template.Node):
             qdict = QueryDict(None, mutable=True)
         elif isinstance(qdict, QueryDict):
             qdict = qdict.copy()
-        elif isinstance(qdict, basestring):
+        elif isinstance(qdict, str):
             if qdict.startswith('?'):
                 qdict = qdict[1:]
             qdict = QueryDict(qdict, mutable=True)
@@ -139,9 +139,9 @@ class QueryStringNode(template.Node):
                     # membership works for numbers.
                     if isinstance(v, (list, tuple)):
                         for e in v:
-                            qdict.appendlist(k, unicode(e))
+                            qdict.appendlist(k, str(e))
                     else:
-                        qdict.appendlist(k, unicode(v))
+                        qdict.appendlist(k, str(v))
             except:
                 # Wrong data structure, qdict remains empty.
                 pass
