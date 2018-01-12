@@ -6,7 +6,7 @@ Template tags to display buttons in pages
 :moduleauthor: François GUÉRIN <fguerin@ville-tourcoing.fr>
 :modulename: forms.models
 """
-from __future__ import unicode_literals
+
 
 import enum
 import logging
@@ -101,7 +101,7 @@ def btn_button(context, **kwargs):
     href_target = get_param('href_target', kwargs, context)
 
     data = {}
-    for item, btn_value in kwargs.items():
+    for item, btn_value in list(kwargs.items()):
         if item.startswith('data_'):
             data[item[5:]] = btn_value
 
@@ -503,7 +503,7 @@ def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-of
         output.update({'id': btn_id})
 
     data = {}
-    for item, value in kwargs.items():
+    for item, value in list(kwargs.items()):
         if item.startswith('data_'):
             data[item[5:]] = value
     if data:
@@ -538,7 +538,7 @@ def expand_data(data):
         return ''
 
     output = []
-    for key, value in data.items():
+    for key, value in list(data.items()):
         if isinstance(value, bool):
             value = str(value).lower()
         output += 'data-%(k)s="%(v)s"' % {'k': key, 'v': value},

@@ -7,7 +7,7 @@ Django application config
 :modulename: buttons.apps
 
 """
-from __future__ import unicode_literals
+
 import logging
 from django.apps import AppConfig
 

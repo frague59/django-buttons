@@ -7,8 +7,8 @@ Template tags to create smart querystrings
 :modulename: buttons.templatetags.querystring_tags
 
 """
-from __future__ import unicode_literals
-from __future__ import absolute_import
+
+
 
 import logging
 import re
@@ -128,7 +128,7 @@ class QueryStringNode(template.Node):
         else:
             # Accept any old dict or list of pairs.
             try:
-                pairs = qdict.items()
+                pairs = list(qdict.items())
             except:
                 pairs = qdict
             qdict = QueryDict(None, mutable=True)

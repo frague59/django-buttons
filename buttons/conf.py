@@ -7,7 +7,7 @@ Configuration values for the :mod:`buttons:buttons` application
 :modulename: buttons.conf
 
 """
-from __future__ import unicode_literals
+
 import logging
 
 from appconf import AppConf
