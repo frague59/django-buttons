@@ -13,6 +13,7 @@ import logging
 import enum
 from django import template
 from django.conf import settings
+from django.forms.utils import flatatt
 from django.utils.translation import ugettext as _
 
 logger = logging.getLogger('buttons.templatetags.buttons_tags')
@@ -32,7 +33,7 @@ class IconPosition(enum.Enum):
 
 
 def _get_param(key, context, kwargs, default=None):
-    return context.get(key) or kwargs.get(key, None) or default
+    return context.get(key) or kwargs.pop(key, None) or default
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -112,6 +113,8 @@ def btn_button(context, **kwargs):
               'data_target': data_target,
               'data_placement': data_placement,
               'debug': settings.DEBUG, }
+    if kwargs:
+        output.update({'flatatt': flatatt(kwargs)})
 
     # logger.debug('btn_button() output = %s', output)
 

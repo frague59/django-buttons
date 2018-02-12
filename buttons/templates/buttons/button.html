@@ -14,7 +14,8 @@
                         {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
                         {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
                         {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
-                        {% if data_target %}data-target="{{ data_target }}" {% endif %}>
+                        {% if data_target %}data-target="{{ data_target }}" {% endif %}
+                        {% if flatatt %}{{ flatatt }}{% endif %}>
                     {% if licon_position == 'LEFT' %}
                         {% fontawesome_icon icon %}&nbsp;{{ text }}
                     {% elif licon_position == 'RIGHT' %}
@@ -34,7 +35,8 @@
                         {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
                         {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
                         {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
-                        {% if data_target %}data-target="{{ data_target }}" {% endif %}>
+                        {% if data_target %}data-target="{{ data_target }}" {% endif %}
+                        {% if flatatt %}{{ flatatt }}{% endif %}>
                     {% if licon_position == 'LEFT' %}
                         {% fontawesome_icon icon %}&nbsp;{{ text }}
                     {% elif licon_position == 'RIGHT' %}
