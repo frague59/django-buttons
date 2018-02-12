@@ -1,3 +1,4 @@
-from __future__ import unicode_literals
-__version__ = VERSION = '1.0.0'
+# coding: utf-8
+__version__ = VERSION = '0.4.2b1'
+
 default_app_config = 'buttons.apps.ButtonsAppConfig'

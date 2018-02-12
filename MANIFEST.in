@@ -1,11 +1,9 @@
-# Includes LICENCE.txt
-include LICENCE.txt
-
-# Include template files
+# Includes LICENCE
+include LICENCE
+include README.rst
+include CHANGELOG.md
+# Files
+recursive-include docs *
 recursive-include buttons/templates *
-
-# Include i18n files
+recursive-include buttons/static *
 recursive-include buttons/locale *
-
-# Exclude docs directory
-prune docs

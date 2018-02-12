@@ -6,7 +6,6 @@ Template tags to display buttons in pages
 :moduleauthor: François GUÉRIN <fguerin@ville-tourcoing.fr>
 :modulename: forms.models
 """
-from __future__ import unicode_literals
 
 import logging
 
@@ -162,7 +161,7 @@ def btn_back(context, text=_('Back'), icon='chevron-left', icon_position=IconPos
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
-def btn_link(context, url, text=_('Link'), icon='btn_link', icon_position=IconPosition.LEFT,
+def btn_link(context, url, text=_('Link'), icon='link', icon_position=IconPosition.RIGHT,
              btn_css_color='btn-default', **kwargs):
     """
     Displays a simple ``link`` btn_button
@@ -403,6 +402,17 @@ def btn_delete(context, url, text, icon='trash', icon_position=IconPosition.RIGH
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_next(context, url, text=_('Next'), btn_css_color='btn-default'):
+    """
+    Renders a ``Next`` button
+
+    :param context: Context data
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Delete'
+    :param btn_css_color: Base button color, default `btn-default`
+
+    :returns: Render-able dict
+    """
+
     logger.debug('btn_next() url = %s', url)
     return btn_button(context, url=url, icon='chevron-right', text=text, icon_position=IconPosition.RIGHT,
                       btn_css_color=btn_css_color)
@@ -410,18 +420,57 @@ def btn_next(context, url, text=_('Next'), btn_css_color='btn-default'):
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
 def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
+    """
+    Renders a ``Previous`` button
+
+    :param context: Context data
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Delete'
+    :param btn_css_color: Base button color, default `btn-default`
+
+    :returns: Render-able dict
+    """
     logger.debug('btn_previous() url = %s', url)
     return btn_button(context, url=url, icon='chevron-left', text=text, icon_position=IconPosition.LEFT,
                       btn_css_color=btn_css_color)
 
 
 @register.inclusion_tag('buttons/switch-button.html', takes_context=False)
-def btn_switch(value, switch_icons, switch_colors, switch_alts, title=None):
-    return {'value': value,
-            'switch_icons': switch_icons,
-            'switch_colors': switch_colors,
-            'switch_alts': switch_alts,
-            'title': title}
+def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-off", switch_colors="success,danger",
+               switch_url=None, title=None, btn_id=None, **kwargs):
+    """
+    Renders a switch button. When ckicked, an ajax request is sent to server, and the value is possibly changed.
+
+    :param value: Switchable value
+    :param switch_alts: alt texts for the switch
+    :param large: If True, a larger button will be displayed
+    :param switch_icons: Icons to display, in order "yes, No"
+    :param switch_colors: Colors used to display the icon, in order "yes, No"
+    :param switch_url: Address to invoke to swirch the value.
+    :param title: Main title in the button.
+    :param btn_id: Identifier for the button
+    :param kwargs: Additional kwargs
+
+    :returns: Render-able dict
+    """
+    output = {'value': value,
+              'switch_icons': switch_icons,
+              'switch_colors': switch_colors,
+              'switch_alts': switch_alts,
+              'large': large,
+              'title': title,
+              'switch_url': switch_url}
+    if btn_id is not None:
+        output.update({'id': btn_id})
+
+    data = {}
+    for item, value in list(kwargs.items()):
+        if item.startswith('data_'):
+            data[item[5:]] = value
+    if data:
+        output.update({'data': data})
+
+    return output
 
 
 @register.inclusion_tag('buttons/single-button.html', takes_context=False)
@@ -430,3 +479,29 @@ def btn_single(icon, color, alt, title=None):
             'color': color,
             'alt': alt,
             'title': title}
+
+
+@register.filter
+def expand_data(data):
+    """
+    Expands a dict containing (key, value) pairs into a serie of data-(key)="(value)" HTML attributes
+
+    .. code::
+
+        data = {'foo': 'bar', 'baz": "qux"}
+        {{ data|expand_data }} >> 'data-foo="bar" data-baz="qux"'
+
+    :param data: data dict
+
+    :returns: HTML attributes
+    """
+    if not data:
+        return ''
+
+    output = []
+    for key, value in list(data.items()):
+        if isinstance(value, bool):
+            value = str(value).lower()
+        output += 'data-%(k)s="%(v)s"' % {'k': key, 'v': value},
+    logger.debug('expand_data(%s) output = %s', data, output)
+    return mark_safe(" ".join(output))
