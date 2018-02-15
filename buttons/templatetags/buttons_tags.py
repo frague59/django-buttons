@@ -31,8 +31,24 @@ class IconPosition(enum.Enum):
     NONE = 'NONE'
 
 
-def _get_param(key, context, kwargs, default=None):
-    return context.get(key) or kwargs.pop(key, None) or default
+def get_param(key, kwargs, context, default=None):
+    """
+    Gets the parameter from the kwargs, then from the context and finally returns the default value
+
+    :param key: Name on the parameters
+    :param kwargs: Kwargs dict
+    :param context: Context dict
+    :param default: Default value
+    :returns: value for the given key
+    """
+
+    if kwargs.get(key, None) is not None:
+        return kwargs.pop(key)
+
+    if context.get(key, None) is not None:
+        return context.get(key)
+
+    return default
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -44,6 +60,7 @@ def btn_button(context, **kwargs):
     :param kwargs: Additional keyword args in:
 
     + `text`: Button text, default 'Button'
+    + `title`: alternative title, used for tooltips for example
     + `url`: Target URL, if needed
     + `icon`: Button icon, default ``None``, from `FontAwesome <http://fontawesome.io/icons/>`_
     + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
@@ -57,43 +74,42 @@ def btn_button(context, **kwargs):
 
     :returns: Render-able dict
     """
-    # logger.debug('btn_button() context = %s', unidecode(context))
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
-    text = _get_param('text', context, kwargs)
-    url = _get_param('url', context, kwargs)
-    _type = _get_param('btn_type', context, kwargs, 'button')
-    btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
+    text = kwargs.pop('text', context.get('text'))
+    title = kwargs.pop('title', context.get('title'))
+    url = kwargs.pop('url', context.get('url'))
+    _type = get_param('btn_type', kwargs, context, 'button')
+    btn_id = kwargs.pop('id', context.get('id')) or kwargs.pop('btn_id', context.get('btn_id'))
 
-    tooltip = _get_param('tooltip', context, kwargs)
+    btn_name = kwargs.pop('btn_name', None)
+    btn_value = kwargs.pop('btn_value', None)
 
-    icon = _get_param('icon', context, kwargs, settings.BUTTONS_ICON)
+    icon = kwargs.pop('icon', context.get('icon', settings.BUTTONS_ICON))
+    icon_position = kwargs.pop('icon_position', context.get('icon_position', settings.BUTTONS_ICON_POSITION))
 
-    icon_position = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_POSITION)
     if isinstance(icon_position, IconPosition):
         icon_position = icon_position.value
     else:
-        icon_position = icon_position.upper()
+        icon_position = IconPosition(icon_position).value
 
-    icon_css_extra = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_CSS_EXTRA)
+    icon_css_extra = kwargs.pop('icon_css_extra', context.get('icon_css_extra', settings.BUTTONS_ICON_CSS_EXTRA))
+    btn_css_color = kwargs.pop('btn_css_color', context.get('btn_css_color', settings.BUTTONS_BTN_CSS_COLOR))
+    btn_css_extra = kwargs.pop('btn_css_extra', context.get('btn_css_extra', settings.BUTTONS_BTN_CSS_EXTRA))
 
-    btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
-    btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
-
-    data_dismiss = _get_param('data_dismiss', context, kwargs)
-    data_toggle = _get_param('data_toggle', context, kwargs)
-    data_target = _get_param('data_target', context, kwargs)
-    data_placement = _get_param('data_placement', context, kwargs)
-
-    href_target = _get_param('href_target', context, kwargs)
+    # data-* items
+    data_dismiss = kwargs.pop('data_dismiss', context.get('data_dismiss'))
+    data_toggle = kwargs.pop('data_toggle', context.get('data_toggle'))
+    data_target = kwargs.pop('data_target', context.get('data_target'))
+    data_placement = kwargs.pop('data_placement', context.get('data_placement'))
 
     # Dict initialization
     output = {'text': text,
               'url': url,
-              'href_target': href_target,
+              'name': btn_name,
 
               # tooltip
-              'tooltip': tooltip,
+              'tooltip': title,
 
               # icon informations
               'icon': icon,
@@ -115,9 +131,31 @@ def btn_button(context, **kwargs):
     if kwargs:
         output.update({'flatatt': flatatt(kwargs)})
 
-    # logger.debug('btn_button() output = %s', output)
+    if btn_value:
+        output.update({'btn_value': btn_value})
+
+    logger.debug('btn_button() output = %s', output)
 
     return output
+
+
+@register.inclusion_tag('buttons/button.html', takes_context=True)
+def btn_copy(context, url, text=_('Copy'), icon='copy', icon_position=IconPosition.RIGHT, **kwargs):
+    """
+    Displays a ``copy`` button
+
+    :param context: Context data
+    :param url: **Mandatory** target url
+    :param text: Button text, default 'Download'
+    :param icon: Button icon, default `copy <http://fontawesome.io/icon/copy/>`
+    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
+    :param kwargs: Additional keyword args in:
+
+    + `btn_css_class`: Button bootstrap class
+
+    :returns: Render-able dict
+    """
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -381,7 +419,7 @@ def btn_update(context, url, text=_('Update'), icon='pencil', icon_position=Icon
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
-def btn_delete(context, url, text, icon='trash', icon_position=IconPosition.RIGHT, btn_css_color='btn-danger',
+def btn_delete(context, url, text=_('Delete'), icon='trash', icon_position=IconPosition.RIGHT, btn_css_color='btn-danger',
                **kwargs):
     """
     Renders a ``Delete`` button
