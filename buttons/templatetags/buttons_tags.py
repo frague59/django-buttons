@@ -7,14 +7,13 @@ Template tags to display buttons in pages
 :modulename: forms.models
 """
 
-
-import enum
 import logging
 
+import enum
 from django import template
 from django.conf import settings
-from django.utils.safestring import mark_safe
-from django.utils.translation import ugettext_lazy as _
+from django.forms.utils import flatatt
+from django.utils.translation import ugettext as _
 
 logger = logging.getLogger('buttons.templatetags.buttons_tags')
 
@@ -32,24 +31,8 @@ class IconPosition(enum.Enum):
     NONE = 'NONE'
 
 
-def get_param(key, kwargs, context, default=None):
-    """
-    Gets the parameter from the kwargs, then from the context and finally returns the default value
-
-    :param key: Name on the parameters
-    :param kwargs: Kwargs dict
-    :param context: Context dict
-    :param default: Default value
-    :returns: value for the given key
-    """
-
-    if kwargs.get(key, None) is not None:
-        return kwargs.pop(key)
-
-    if context.get(key, None) is not None:
-        return context.get(key)
-
-    return default
+def _get_param(key, context, kwargs, default=None):
+    return context.get(key) or kwargs.pop(key, None) or default
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
@@ -61,57 +44,56 @@ def btn_button(context, **kwargs):
     :param kwargs: Additional keyword args in:
 
     + `text`: Button text, default 'Button'
-    + `title`: alternative title, used for tooltips for example
     + `url`: Target URL, if needed
     + `icon`: Button icon, default ``None``, from `FontAwesome <http://fontawesome.io/icons/>`_
     + `icon_position`: Button icon position, , default ``None``, aka no icon displayed
     + `btn_css_class`: Button bootstrap class
     + `btn_id`: Button Id
     + `btn_url`: Button url. If set, a ``a`` tag us used instead of ``button``
-    + `data`: JSON loadable string
-    + `btn_name`: html element attribute `name="{{ btn_name }}"`
-    + `btn_value`: html element attribute `value="{{ btn_value }}"`
+    + `data_dismiss`: Set ``data-dismiss`` HTML attribute
+    + `data_toggle`: Set ``data-toggle`` HTML attribute
+    + `data_placement`: Set ``data-placement`` HTML attribute
+    + `data_target`: Set ``data-target`` HTML attribute
 
     :returns: Render-able dict
     """
+    # logger.debug('btn_button() context = %s', unidecode(context))
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
-    text = get_param('text', kwargs, context)
-    title = get_param('title', kwargs, context)
-    url = get_param('url', kwargs, context)
-    _type = get_param('btn_type', kwargs, context, 'button')
-    btn_id = get_param('id', kwargs, context) or get_param('btn_id', kwargs, context)
+    text = _get_param('text', context, kwargs)
+    url = _get_param('url', context, kwargs)
+    _type = _get_param('btn_type', context, kwargs, 'button')
+    btn_id = _get_param('id', context, kwargs) or _get_param('btn_id', context, kwargs)
 
-    btn_name = kwargs.get('btn_name', None)
-    btn_value = kwargs.get('btn_value', None)
+    tooltip = _get_param('tooltip', context, kwargs)
 
-    icon = get_param('icon', kwargs, context, settings.BUTTONS_ICON)
+    icon = _get_param('icon', context, kwargs, settings.BUTTONS_ICON)
 
-    icon_position = get_param('icon_position', kwargs, context, settings.BUTTONS_ICON_POSITION)
+    icon_position = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_POSITION)
     if isinstance(icon_position, IconPosition):
         icon_position = icon_position.value
     else:
         icon_position = icon_position.upper()
 
-    icon_css_extra = get_param('icon_position', kwargs, context, settings.BUTTONS_ICON_CSS_EXTRA)
+    icon_css_extra = _get_param('icon_position', context, kwargs, settings.BUTTONS_ICON_CSS_EXTRA)
 
-    btn_css_color = get_param('btn_css_color', kwargs, context, settings.BUTTONS_BTN_CSS_COLOR)
-    btn_css_extra = get_param('btn_css_extra', kwargs, context, settings.BUTTONS_BTN_CSS_EXTRA)
+    btn_css_color = _get_param('btn_css_color', context, kwargs, settings.BUTTONS_BTN_CSS_COLOR)
+    btn_css_extra = _get_param('btn_css_extra', context, kwargs, settings.BUTTONS_BTN_CSS_EXTRA)
 
-    href_target = get_param('href_target', kwargs, context)
+    data_dismiss = _get_param('data_dismiss', context, kwargs)
+    data_toggle = _get_param('data_toggle', context, kwargs)
+    data_target = _get_param('data_target', context, kwargs)
+    data_placement = _get_param('data_placement', context, kwargs)
 
-    data = {}
-    for item, btn_value in list(kwargs.items()):
-        if item.startswith('data_'):
-            data[item[5:]] = btn_value
+    href_target = _get_param('href_target', context, kwargs)
 
     # Dict initialization
     output = {'text': text,
               'url': url,
               'href_target': href_target,
 
-              # tooltip text
-              'title': title,
+              # tooltip
+              'tooltip': tooltip,
 
               # icon informations
               'icon': icon,
@@ -125,38 +107,17 @@ def btn_button(context, **kwargs):
               'btn_id': btn_id,
 
               # `data-*` fields
-              'data': data,
-              'debug': settings.DEBUG,
-              }
+              'data_dismiss': data_dismiss,
+              'data_toggle': data_toggle,
+              'data_target': data_target,
+              'data_placement': data_placement,
+              'debug': settings.DEBUG, }
+    if kwargs:
+        output.update({'flatatt': flatatt(kwargs)})
 
-    if btn_name:
-        output.update({'btn_name': btn_name})
-
-    if btn_value:
-        output.update({'btn_value': btn_value})
-
-    logger.debug('btn_button() output = %s', output)
+    # logger.debug('btn_button() output = %s', output)
 
     return output
-
-
-@register.inclusion_tag('buttons/button.html', takes_context=True)
-def btn_copy(context, url, text=_('Copy'), icon='copy', icon_position=IconPosition.RIGHT, **kwargs):
-    """
-    Displays a ``copy`` button
-
-    :param context: Context data
-    :param url: **Mandatory** target url
-    :param text: Button text, default 'Download'
-    :param icon: Button icon, default `copy <http://fontawesome.io/icon/copy/>`
-    :param icon_position: Button icon position, default :attr:`buttons.templatetags.buttons_tags.IconPosition.RIGHT`
-    :param kwargs: Additional keyword args in:
-
-    + `btn_css_class`: Button bootstrap class
-
-    :returns: Render-able dict
-    """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
 
 @register.inclusion_tag('buttons/button.html', takes_context=True)
