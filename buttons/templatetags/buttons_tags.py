@@ -39,7 +39,7 @@ def get_param(key, kwargs, context, default=None):
     :param kwargs: Kwargs dict
     :param context: Context dict
     :param default: Default value
-    :returns: value for the given key
+    :return: value for the given key
     """
 
     if kwargs.get(key, None) is not None:
@@ -72,7 +72,7 @@ def btn_button(context, **kwargs):
     + `data_placement`: Set ``data-placement`` HTML attribute
     + `data_target`: Set ``data-target`` HTML attribute
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
@@ -153,7 +153,7 @@ def btn_copy(context, url, text=_('Copy'), icon='copy', icon_position=IconPositi
 
     + `btn_css_class`: Button bootstrap class
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
@@ -172,7 +172,7 @@ def btn_download(context, url, text=_('Download'), icon='download', icon_positio
 
     + `btn_css_class`: Button bootstrap class
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
@@ -192,7 +192,7 @@ def btn_back(context, text=_('Back'), icon='chevron-left', icon_position=IconPos
 
     + `btn_css_class`: Button bootstrap class
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
                       url='javascript:history.back()', **kwargs)
@@ -213,7 +213,7 @@ def btn_link(context, url, text=_('Link'), icon='link', icon_position=IconPositi
 
     :param kwargs:
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -233,7 +233,7 @@ def btn_home(context, url='/', text=_('Home'), icon='home', icon_position=IconPo
     :param btn_css_color: Button bootstrap class, default 'btn-primary'
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
                       **kwargs)
@@ -252,7 +252,7 @@ def btn_submit(context, text=_('Submit'), icon='check', icon_position=IconPositi
     :param btn_css_color: Base button color
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, text=text, btn_type='submit', icon=icon, btn_css_color=btn_css_color,
                       icon_position=icon_position, **kwargs)
@@ -272,7 +272,7 @@ def btn_list(context, url, text=_('List'), icon='list', icon_position=IconPositi
     :param btn_css_color: Base button color
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
                       **kwargs)
@@ -292,7 +292,7 @@ def btn_detail(context, url, text=_('Detail'), icon='info', icon_position=IconPo
     :param btn_css_color: Base button color
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
                       **kwargs)
@@ -312,7 +312,7 @@ def btn_create(context, url, text=_('Create'), icon='plus', icon_position=IconPo
     :param btn_css_color: Base button color, default `btn-primary`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     logger.debug('btn_create() url = *%s*', url)
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
@@ -332,7 +332,7 @@ def btn_search(context, text=_('Search'), icon='search', icon_position=IconPosit
     :param btn_css_color: Base button color, default `btn-default`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, type='submit', text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -352,7 +352,7 @@ def btn_close(context, text, icon='times', icon_position=IconPosition.RIGHT, btn
     :param data_dismiss: Adds ``data-dismiss`` with `True` value
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color,
                       data_dismiss=data_dismiss, **kwargs)
@@ -372,7 +372,7 @@ def btn_login(context, url, text=_('Login'), icon='login', icon_position=IconPos
     :param btn_css_color: Base button color, default `btn-default`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -392,7 +392,7 @@ def btn_logout(context, url, text=_('Logout'), icon='logout', icon_position=Icon
     :param btn_css_color: Base button color, default `btn-default`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -412,7 +412,7 @@ def btn_update(context, url, text=_('Update'), icon='pencil', icon_position=Icon
     :param btn_css_color: Base button color, default `btn-default`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -432,7 +432,7 @@ def btn_delete(context, url, text=_('Delete'), icon='trash', icon_position=IconP
     :param btn_css_color: Base button color, default `btn-danger`
     :param kwargs: Additional keyword args
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position,
                       btn_css_color=btn_css_color, **kwargs)
@@ -448,7 +448,7 @@ def btn_next(context, url, text=_('Next'), btn_css_color='btn-default'):
     :param text: Button text, default 'Delete'
     :param btn_css_color: Base button color, default `btn-default`
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
 
     logger.debug('btn_next() url = %s', url)
@@ -466,7 +466,7 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
     :param text: Button text, default 'Delete'
     :param btn_css_color: Base button color, default `btn-default`
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     logger.debug('btn_previous() url = %s', url)
     return btn_button(context, url=url, icon='chevron-left', text=text, icon_position=IconPosition.LEFT,
@@ -489,7 +489,7 @@ def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-of
     :param btn_id: Identifier for the button
     :param kwargs: Additional kwargs
 
-    :returns: Render-able dict
+    :return: Render-able dict
     """
     output = {'value': value,
               'switch_icons': switch_icons,
@@ -531,7 +531,7 @@ def expand_data(data):
 
     :param data: data dict
 
-    :returns: HTML attributes
+    :return: HTML attributes
     """
     if not data:
         return ''
