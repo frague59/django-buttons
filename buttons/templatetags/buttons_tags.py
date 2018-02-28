@@ -13,6 +13,7 @@ import enum
 from django import template
 from django.conf import settings
 from django.forms.utils import flatatt
+from django.utils.safestring import mark_safe
 from django.utils.translation import ugettext as _
 
 logger = logging.getLogger('buttons.templatetags.buttons_tags')
@@ -477,7 +478,10 @@ def btn_previous(context, url, text=_('Previous'), btn_css_color='btn-default'):
 def btn_switch(value, switch_alts, large=True, switch_icons="toggle-on,toggle-off", switch_colors="success,danger",
                switch_url=None, title=None, btn_id=None, **kwargs):
     """
-    Renders a switch button. When ckicked, an ajax request is sent to server, and the value is possibly changed.
+    Renders a switch button. When clicked, an ajax request is sent to server, and the value is possibly changed.
+
+    .. note::
+        A custom check button is displayed with the `buttons/switch-button.html` template
 
     :param value: Switchable value
     :param switch_alts: alt texts for the switch
