@@ -36,6 +36,8 @@
                         {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
                         {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
                         {% if data_target %}data-target="{{ data_target }}" {% endif %}
+                        {% if name %}name="{{ name }}"{% endif %}
+                        {% if value %}value="{{ value }}"{% endif %}
                         {% if flatatt %}{{ flatatt }}{% endif %}>
                     {% if licon_position == 'LEFT' %}
                         {% fontawesome_icon icon %}&nbsp;{{ text }}
