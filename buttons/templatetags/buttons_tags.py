@@ -83,8 +83,8 @@ def btn_button(context, **kwargs):
     _type = get_param('btn_type', kwargs, context, 'button')
     btn_id = kwargs.pop('id', context.get('id')) or kwargs.pop('btn_id', context.get('btn_id'))
 
-    btn_name = kwargs.pop('btn_name', None)
-    btn_value = kwargs.pop('btn_value', None)
+    btn_name = kwargs.pop('btn_name', None) or kwargs.pop('name', None)
+    btn_value = kwargs.pop('btn_value', None) or kwargs.pop('value', None)
 
     icon = kwargs.pop('icon', context.get('icon', settings.BUTTONS_ICON))
     icon_position = kwargs.pop('icon_position', context.get('icon_position', settings.BUTTONS_ICON_POSITION))
@@ -133,7 +133,7 @@ def btn_button(context, **kwargs):
         output.update({'flatatt': flatatt(kwargs)})
 
     if btn_value:
-        output.update({'btn_value': btn_value})
+        output.update({'value': btn_value})
 
     logger.debug('btn_button() output = %s', output)
 
