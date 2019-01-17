@@ -1,0 +1,55 @@
+{% if debug %}<!-- buttons/button.html -->{% endif %}
+{% load fontawesome %}
+{% spaceless %}
+    {% with licon_position=icon_position|upper %}
+        <!-- licon_position = {{ licon_position }} -->
+        {% spaceless %}
+            {% if url %}
+                <a
+                        href="{{ url }}"
+                        {% if btn_id %}id="{{ btn_id }}"{% endif %}
+                        {% if tooltip %}title="{{ tooltip }}" alt="{{ tooltip }}" aria-label="{{ tooltip }}"
+                        {% else %}title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"{% endif %}
+                        class="btn {{ btn_css_color }} {{ btn_css_extra }}"
+                        {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
+                        {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
+                        {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
+                        {% if data_target %}data-target="{{ data_target }}" {% endif %}
+                        {% if flatatt %}{{ flatatt }}{% endif %}>
+                    {% if licon_position == 'LEFT' %}
+                        {% fontawesome_icon icon %}&nbsp;{{ text }}
+                    {% elif licon_position == 'RIGHT' %}
+                        {{ text }}&nbsp;{% fontawesome_icon icon %}
+                    {% elif licon_position == 'ONLY' %}
+                        {% fontawesome_icon icon %}
+                    {% else %}
+                        {{ text }}
+                    {% endif %}
+                </a>
+            {% else %}
+                <button type="{{ btn_type }}"
+                        {% if btn_id %}id="{{ btn_id }}"{% endif %}
+                        {% if tooltip %}title="{{ tooltip }}" alt="{{ tooltip }}" aria-label="{{ tooltip }}"
+                        {% else %}title="{{ text }}" alt="{{ text }}" aria-label="{{ text }}"{% endif %}
+                        class="btn {{ btn_css_color }} {{ btn_css_extra }}"
+                        {% if data_dismiss %}data-dismiss="{{ data_dismiss }}" {% endif %}
+                        {% if data_toggle %}data-toggle="{{ data_toggle }}" {% endif %}
+                        {% if data_placement %}data-placement="{{ data_placement }}" {% endif %}
+                        {% if data_target %}data-target="{{ data_target }}" {% endif %}
+                        {% if name %}name="{{ name }}"{% endif %}
+                        {% if value %}value="{{ value }}"{% endif %}
+                        {% if flatatt %}{{ flatatt }}{% endif %}>
+                    {% if licon_position == 'LEFT' %}
+                        {% fontawesome_icon icon %}&nbsp;{{ text }}
+                    {% elif licon_position == 'RIGHT' %}
+                        {{ text }}&nbsp;{% fontawesome_icon icon %}
+                    {% elif licon_position == 'ONLY' %}
+                        {% fontawesome_icon icon %}
+                    {% else %}
+                        {{ text }}
+                    {% endif %}
+                </button>
+            {% endif %}
+        {% endspaceless %}
+    {% endwith %}
+{% endspaceless %}
