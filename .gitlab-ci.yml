@@ -77,7 +77,7 @@ release_test:
     paths:
     - .pip/
 
-git # Builds sphinx docs
+# Builds sphinx docs
 pages:
   stage: build
   before_script:
