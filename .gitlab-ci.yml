@@ -11,41 +11,39 @@ variables:
   DEBUG_SPHINX: 0
   SONAR_HOST: "http://sonarqube.ville.tg/"
 
-sonar:
-  stage: sonar
-  before_script:
-  - apt-get --yes -qq update && apt-get --yes -qq install zip
-  # Installs sonar-runner ZIP file
-  - if [[ ! -d sonar-scanner-$SCANER_VERSION ]]; then
-  -     wget --no-verbose https://sonarsource.bintray.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-$SCANER_VERSION.zip
-  -     unzip -q sonar-scanner-cli-$SCANER_VERSION.zip
-  - fi
-  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner --version
-  # Installs pip requirements
-  - test ! -d .pip && mkdir .pip
-  - if [[ -f requirements/common.txt ]] && [[ -f requirements/constraints.txt ]]; then
-  -     pip install --cache-dir .pip/
-          --requirement requirements/common.txt --constraint requirements/constraints.txt;
-  - fi
-  - pip install --cache-dir .pip/
-      --requirement requirements/sonar.txt --constraint requirements/constraints.txt
-
+# Scans against sonar
+sonar_scan:
+  stage: build
+  variables:
+    DEBUG_SONAR: 1
+    SONAR_VERSION: 3.2.0.1492
+    SONAR_SCANNER_OPTS: "-Xmx512m"
+    SONAR_HOST: "http://sonarqube.ville.tg/"
+    SONAR_SCANNER_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
   script:
+  # Installs OpenJDK JRE
+  - apt-get --yes -qq install openjdk-7-jre
+  # Installs requirements
+  - pip install --cache-dir .pip/ pip --upgrade
+  - pip install --cache-dir .pip/ --requirement requirements/sonar.txt --constraint requirements/constraints.txt
+  # Installs sonar-runner ZIP file
+  - if [[ ! -d sonar-scanner-${SONAR_VERSION} ]]; then
+  -     wget --no-verbose ${SONAR_SCANNER_URL}
+  -     unzip -q sonar-scanner-cli-${SONAR_VERSION}.zip
+  - fi
+  - test $DEBUG_SONAR -eq 1 && ls -la sonar-scanner-${SONAR_VERSION}/bin/
+  - test $DEBUG_SONAR -eq 1 && sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner --version
+
   # Runs the sonar-runner
-  - test ${DEBUG_SONAR} -eq 1 && pylint --version
-  - export SONAR_SCANNER_OPTS="-Xmx512m"
+  - export SONAR_SCANNER_OPTS=${SONAR_SCANNER_OPTS}
   - export SONAR_USER_HOME=.
-  - sonar-scanner-$SCANER_VERSION/bin/sonar-scanner -Dsonar.host.url=$SONAR_HOST
-
-  cache:
-    paths:
-    - sonar-scanner-cli-$SCANER_VERSION.zip
-    - sonar-scanner-$SCANER_VERSION/
-    - .scannerwork/
-    - .pip/
-
+  - sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner -Dsonar.host.url=${SONAR_HOST}
   tags:
   - sonar
+  cache:
+    paths:
+    - sonar-scanner-${SONAR_VERSION}/
+    - .pip/
 
 # Builds wheel and upload to pypi
 release_tag:
