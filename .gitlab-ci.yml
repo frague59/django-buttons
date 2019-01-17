@@ -11,8 +11,15 @@ variables:
   SONAR_HOST: "http://sonarqube.ville.tg/"
   SONAR_SCANNER_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
 
-sonar:
-  stage: sonar
+# Scans against sonar
+sonar_scan:
+  stage: build
+  variables:
+    DEBUG_SONAR: 1
+    SONAR_VERSION: 3.2.0.1492
+    SONAR_SCANNER_OPTS: "-Xmx512m"
+    SONAR_HOST: "http://sonarqube.ville.tg/"
+    SONAR_SCANNER_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
   script:
   # Installs OpenJDK JRE
   - apt-get --yes -qq install openjdk-7-jre
@@ -70,7 +77,7 @@ release_test:
     paths:
     - .pip/
 
-# Builds sphinx docs
+git # Builds sphinx docs
 pages:
   stage: build
   before_script:
