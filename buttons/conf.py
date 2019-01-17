@@ -24,6 +24,8 @@ class ButtonsAppConf(AppConf):
     ICON = 'exclamation'
     ICON_CSS_EXTRA = ''
 
+    FONTAWESOME_VERSION = 5
+
     BTN_CSS_COLOR = 'btn-default'
     BTN_CSS_EXTRA = 'btn-sm'
 

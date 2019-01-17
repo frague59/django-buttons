@@ -22,7 +22,14 @@ register = template.Library()
 
 
 def get_filename(filename_template: str = "buttons/%s/button.html"):
-    if "fontawesome_5" in settings.INSTALLED_APPS:
+    """
+    Gets the filename according to the presence of fontawesome 5
+
+    :param filename_template: filename template
+    :return:
+    """
+    if settings.BUTTONS_FONTAWESOME_VERSION == 5 or "fontawesome_5" in settings.INSTALLED_APPS:
+        logger.info("get_filename() fontawesome_5 detected...")
         return filename_template % "fontawesome-5"
 
     return filename_template % "fontawesome-4"
