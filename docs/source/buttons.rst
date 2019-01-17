@@ -1,11 +1,6 @@
 buttons package
 ===============
 
-.. automodule:: buttons
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
 Subpackages
 -----------
 
@@ -15,6 +10,14 @@ Subpackages
 
 Submodules
 ----------
+
+buttons.apps module
+-------------------
+
+.. automodule:: buttons.apps
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
 buttons.conf module
 -------------------
@@ -33,3 +36,10 @@ buttons.models module
     :show-inheritance:
 
 
+Module contents
+---------------
+
+.. automodule:: buttons
+    :members:
+    :undoc-members:
+    :show-inheritance:

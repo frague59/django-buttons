@@ -1,18 +1,30 @@
 buttons.templatetags package
 ============================
 
-.. automodule:: buttons.templatetags
+Submodules
+----------
+
+buttons.templatetags.buttons\_tags module
+-----------------------------------------
+
+.. automodule:: buttons.templatetags.buttons_tags
     :members:
     :undoc-members:
     :show-inheritance:
 
-Submodules
-----------
+buttons.templatetags.querystring\_tags module
+---------------------------------------------
 
-buttons.templatetags.buttons_tags module
-----------------------------------------
+.. automodule:: buttons.templatetags.querystring_tags
+    :members:
+    :undoc-members:
+    :show-inheritance:
 
-.. automodule:: buttons.templatetags.buttons_tags
+
+Module contents
+---------------
+
+.. automodule:: buttons.templatetags
     :members:
     :undoc-members:
     :show-inheritance:
