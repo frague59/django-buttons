@@ -28,7 +28,10 @@ def get_filename(filename_template: str = "buttons/%s/button.html"):
     :param filename_template: filename template
     :return:
     """
-    if settings.BUTTONS_FONTAWESOME_VERSION == 5 or "fontawesome_5" in settings.INSTALLED_APPS:
+    if (
+        settings.BUTTONS_FONTAWESOME_VERSION == 5
+        or "fontawesome_5" in settings.INSTALLED_APPS
+    ):
         logger.info("get_filename() fontawesome_5 detected...")
         return filename_template % "fontawesome-5"
 
@@ -595,7 +598,7 @@ def btn_update(
     context,
     url,
     text=_("Update"),
-    icon="pencil",
+    icon="edit",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-warning",
     **kwargs
@@ -705,7 +708,9 @@ def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default"):
     )
 
 
-@register.inclusion_tag(get_filename("buttons/%s/switch-button.html"), takes_context=False)
+@register.inclusion_tag(
+    get_filename("buttons/%s/switch-button.html"), takes_context=False
+)
 def btn_switch(
     value,
     switch_alts,
@@ -757,7 +762,9 @@ def btn_switch(
     return output
 
 
-@register.inclusion_tag(get_filename("buttons/%s/single-button.html"), takes_context=False)
+@register.inclusion_tag(
+    get_filename("buttons/%s/single-button.html"), takes_context=False
+)
 def btn_single(icon, color, alt, title=None):
     return {"icon": icon, "color": color, "alt": alt, "title": title}
 
