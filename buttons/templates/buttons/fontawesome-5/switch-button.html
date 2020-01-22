@@ -1,5 +1,5 @@
 {% if debug %}<!-- buttons/switch-button.html -->{% endif %}
-{% load fontawesome buttons_tags %}
+{% load fontawesome_5 buttons_tags %}
 {% spaceless %}
     {% with color_true=True|yesno:switch_colors color_false=False|yesno:switch_colors icon_true=True|yesno:switch_icons icon_false=False|yesno:switch_icons alt_true=True|yesno:switch_alts alt_false=False|yesno:switch_alts %}
         <span {% if id %}id="{{ id }}"{% endif %} class="switch"
