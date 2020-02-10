@@ -38,14 +38,15 @@ sonar_scan:
   - export SONAR_SCANNER_OPTS=${SONAR_SCANNER_OPTS}
   - export SONAR_USER_HOME=.
   - sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner -Dsonar.host.url=${SONAR_HOST}
-  tags:
-  - sonar
   cache:
     paths:
     - sonar-scanner-${SONAR_VERSION}/
     - .pip/
+  tags:
+    - python3.7
+    - docker
 
-# Builds wheel and upload to pypi
+# Builds wheel and upload to PyPI
 release_tag:
   stage: build
   before_script:
@@ -61,8 +62,11 @@ release_tag:
     - .pip/
   only:
     - tags
+  tags:
+    - python3.7
+    - docker
 
-# Builds wheel and upload to pypitest
+# Builds wheel and upload to PyPI/test
 release_test:
   stage: build
   before_script:
@@ -76,6 +80,9 @@ release_test:
   cache:
     paths:
     - .pip/
+  tags:
+    - python3.7
+    - docker
 
 # Builds sphinx docs
 pages:
@@ -105,3 +112,7 @@ pages:
   cache:
     paths:
     - .pip/
+
+  tags:
+    - python3.7
+    - docker
