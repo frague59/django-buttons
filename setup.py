@@ -28,15 +28,14 @@ setup(
         "License :: OSI Approved :: MIT License",
     ],
     install_requires=[
-        "django",
         "django-appconf",
     ],
-    extra_requires={
-        "fontawesome4": [
+    extras_require={
+        "fa4": [
             "django-fontawesome",
         ],
-        "fontawesome5": [
-            "django-fontawesome5",
+        "fa5": [
+            "django-fontawesome-5",
         ],
     },
     # Source files
