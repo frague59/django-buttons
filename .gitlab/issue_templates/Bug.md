@@ -1,6 +1,5 @@
-## Contexte 
+## Contexte
 
 ## Fonctionnement actuel
 
 ## Fonctionnement attendu
-

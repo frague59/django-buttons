@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Template tags to create smart querystrings
 
@@ -9,7 +8,6 @@ Template tags to create smart querystrings
 """
 
 
-
 import logging
 import re
 
@@ -17,8 +15,8 @@ from django import template
 from django.http import QueryDict
 from django.utils.encoding import smart_str
 
-__author__ = 'fguerin'
-logger = logging.getLogger('buttons.templatetags.querystring_tags')
+__author__ = "fguerin"
+logger = logging.getLogger("buttons.templatetags.querystring_tags")
 register = template.Library()
 
 
@@ -72,7 +70,7 @@ def query_string(parser, token):
     mods = []
     asvar = None
     bits = bits[1:]
-    if len(bits) >= 2 and bits[-2] == 'as':
+    if len(bits) >= 2 and bits[-2] == "as":
         asvar = bits[-1]
         bits = bits[:-2]
     if len(bits) >= 1:
@@ -96,8 +94,7 @@ class QueryStringNode(template.Node):
         self.asvar = asvar
 
     def render(self, context):
-        mods = [(smart_str(k, 'ascii'), op, v.resolve(context))
-                for k, op, v in self.mods]
+        mods = [(smart_str(k, "ascii"), op, v.resolve(context)) for k, op, v in self.mods]
         if self.qdict:
             qdict = self.qdict.resolve(context)
         else:
@@ -109,10 +106,10 @@ class QueryStringNode(template.Node):
             qdict.setlist(k, self._process_list(qdict.getlist(k), op, v))
         qstring = qdict.urlencode()
         if qstring:
-            qstring = '?' + qstring
+            qstring = "?" + qstring
         if self.asvar:
             context[self.asvar] = qstring
-            return ''
+            return ""
         else:
             return qstring
 
@@ -122,14 +119,14 @@ class QueryStringNode(template.Node):
         elif isinstance(qdict, QueryDict):
             qdict = qdict.copy()
         elif isinstance(qdict, str):
-            if qdict.startswith('?'):
+            if qdict.startswith("?"):
                 qdict = qdict[1:]
             qdict = QueryDict(qdict, mutable=True)
         else:
             # Accept any old dict or list of pairs.
             try:
                 pairs = list(qdict.items())
-            except:
+            except Exception:
                 pairs = qdict
             qdict = QueryDict(None, mutable=True)
             # Enter each pair into QueryDict object:
@@ -142,14 +139,14 @@ class QueryStringNode(template.Node):
                             qdict.appendlist(k, str(e))
                     else:
                         qdict.appendlist(k, str(v))
-            except:
+            except Exception:
                 # Wrong data structure, qdict remains empty.
                 pass
         return qdict
 
     def _process_list(self, current_list, op, val):
         if not val:
-            if op == '=':
+            if op == "=":
                 return []
             else:
                 return current_list
@@ -158,15 +155,15 @@ class QueryStringNode(template.Node):
             val = [val]
         val = [str(v) for v in val]
         # Remove
-        if op == '-':
+        if op == "-":
             for v in val:
                 while v in current_list:
                     current_list.remove(v)
         # Replace
-        elif op == '=':
+        elif op == "=":
             current_list = val
         # Add
-        elif op == '+':
+        elif op == "+":
             for v in val:
                 current_list.append(v)
         return current_list

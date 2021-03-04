@@ -86,4 +86,3 @@ max-parents=7
 max-attributes=7
 min-public-methods=0
 max-public-methods=50
-

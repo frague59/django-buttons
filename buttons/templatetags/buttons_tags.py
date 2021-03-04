@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Template tags to display buttons in pages
 
@@ -7,9 +6,9 @@ Template tags to display buttons in pages
 :modulename: forms.models
 """
 
+import enum
 import logging
 
-import enum
 from django import template
 from django.conf import settings
 from django.forms.utils import flatatt
@@ -28,10 +27,7 @@ def get_filename(filename_template: str = "buttons/%s/button.html"):
     :param filename_template: filename template
     :return:
     """
-    if (
-        settings.BUTTONS_FONTAWESOME_VERSION == 5
-        or "fontawesome_5" in settings.INSTALLED_APPS
-    ):
+    if settings.BUTTONS_FONTAWESOME_VERSION == 5 or "fontawesome_5" in settings.INSTALLED_APPS:
         logger.info("get_filename() fontawesome_5 detected...")
         return filename_template % "fontawesome-5"
 
@@ -98,32 +94,22 @@ def btn_button(context, **kwargs):
     title = kwargs.pop("title", context.get("title"))
     url = kwargs.pop("url", context.get("url"))
     _type = get_param("btn_type", kwargs, context, "button")
-    btn_id = kwargs.pop("id", context.get("id")) or kwargs.pop(
-        "btn_id", context.get("btn_id")
-    )
+    btn_id = kwargs.pop("id", context.get("id")) or kwargs.pop("btn_id", context.get("btn_id"))
 
     btn_name = kwargs.pop("btn_name", None) or kwargs.pop("name", None)
     btn_value = kwargs.pop("btn_value", None) or kwargs.pop("value", None)
 
     icon = kwargs.pop("icon", context.get("icon", settings.BUTTONS_ICON))
-    icon_position = kwargs.pop(
-        "icon_position", context.get("icon_position", settings.BUTTONS_ICON_POSITION)
-    )
+    icon_position = kwargs.pop("icon_position", context.get("icon_position", settings.BUTTONS_ICON_POSITION))
 
     if isinstance(icon_position, IconPosition):
         icon_position = icon_position.value
     else:
         icon_position = IconPosition(icon_position).value
 
-    icon_css_extra = kwargs.pop(
-        "icon_css_extra", context.get("icon_css_extra", settings.BUTTONS_ICON_CSS_EXTRA)
-    )
-    btn_css_color = kwargs.pop(
-        "btn_css_color", context.get("btn_css_color", settings.BUTTONS_BTN_CSS_COLOR)
-    )
-    btn_css_extra = kwargs.pop(
-        "btn_css_extra", context.get("btn_css_extra", settings.BUTTONS_BTN_CSS_EXTRA)
-    )
+    icon_css_extra = kwargs.pop("icon_css_extra", context.get("icon_css_extra", settings.BUTTONS_ICON_CSS_EXTRA))
+    btn_css_color = kwargs.pop("btn_css_color", context.get("btn_css_color", settings.BUTTONS_BTN_CSS_COLOR))
+    btn_css_extra = kwargs.pop("btn_css_extra", context.get("btn_css_extra", settings.BUTTONS_BTN_CSS_EXTRA))
 
     # data-* items
     data_dismiss = kwargs.pop("data_dismiss", context.get("data_dismiss"))
@@ -166,14 +152,7 @@ def btn_button(context, **kwargs):
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_copy(
-    context,
-    url,
-    text=_("Copy"),
-    icon="copy",
-    icon_position=IconPosition.RIGHT,
-    **kwargs
-):
+def btn_copy(context, url, text=_("Copy"), icon="copy", icon_position=IconPosition.RIGHT, **kwargs):
     """
     Displays a ``copy`` button
 
@@ -188,20 +167,11 @@ def btn_copy(
 
     :return: Render-able dict
     """
-    return btn_button(
-        context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs
-    )
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_download(
-    context,
-    url,
-    text=_("Download"),
-    icon="download",
-    icon_position=IconPosition.RIGHT,
-    **kwargs
-):
+def btn_download(context, url, text=_("Download"), icon="download", icon_position=IconPosition.RIGHT, **kwargs):
     """
     Displays a ``download`` button
 
@@ -216,19 +186,12 @@ def btn_download(
 
     :return: Render-able dict
     """
-    return btn_button(
-        context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs
-    )
+    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_back(
-    context,
-    text=_("Back"),
-    icon="chevron-left",
-    icon_position=IconPosition.LEFT,
-    btn_css_color="btn-primary",
-    **kwargs
+    context, text=_("Back"), icon="chevron-left", icon_position=IconPosition.LEFT, btn_css_color="btn-primary", **kwargs
 ):
     """
     Displays a ``btn_back`` button
@@ -251,19 +214,13 @@ def btn_back(
         icon_position=icon_position,
         btn_css_color=btn_css_color,
         url="javascript:history.back()",
-        **kwargs
+        **kwargs,
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_link(
-    context,
-    url,
-    text=_("Link"),
-    icon="link",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-default",
-    **kwargs
+    context, url, text=_("Link"), icon="link", icon_position=IconPosition.RIGHT, btn_css_color="btn-default", **kwargs
 ):
     """
     Displays a simple ``link`` btn_button
@@ -280,13 +237,7 @@ def btn_link(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
@@ -298,7 +249,7 @@ def btn_home(
     icon="home",
     icon_position=IconPosition.LEFT,
     btn_css_color="btn-primary",
-    **kwargs
+    **kwargs,
 ):
     """
     Displays a ``btn_back`` btn_button
@@ -314,24 +265,13 @@ def btn_home(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_submit(
-    context,
-    text=_("Submit"),
-    icon="check",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-primary",
-    **kwargs
+    context, text=_("Submit"), icon="check", icon_position=IconPosition.RIGHT, btn_css_color="btn-primary", **kwargs
 ):
     """
     Displays a ``submit`` button
@@ -352,19 +292,13 @@ def btn_submit(
         icon=icon,
         btn_css_color=btn_css_color,
         icon_position=icon_position,
-        **kwargs
+        **kwargs,
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_list(
-    context,
-    url,
-    text=_("List"),
-    icon="list",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-primary",
-    **kwargs
+    context, url, text=_("List"), icon="list", icon_position=IconPosition.RIGHT, btn_css_color="btn-primary", **kwargs
 ):
     """
     Displays a ``list`` button
@@ -380,25 +314,13 @@ def btn_list(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_detail(
-    context,
-    url,
-    text=_("Detail"),
-    icon="info",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-primary",
-    **kwargs
+    context, url, text=_("Detail"), icon="info", icon_position=IconPosition.RIGHT, btn_css_color="btn-primary", **kwargs
 ):
     """
     Displays a `Detail` button
@@ -414,25 +336,13 @@ def btn_detail(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_create(
-    context,
-    url,
-    text=_("Create"),
-    icon="plus",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-primary",
-    **kwargs
+    context, url, text=_("Create"), icon="plus", icon_position=IconPosition.RIGHT, btn_css_color="btn-primary", **kwargs
 ):
     """
     Displays a `Create` button
@@ -449,24 +359,13 @@ def btn_create(
     """
     logger.debug("btn_create() url = *%s*", url)
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_search(
-    context,
-    text=_("Search"),
-    icon="search",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-default",
-    **kwargs
+    context, text=_("Search"), icon="search", icon_position=IconPosition.RIGHT, btn_css_color="btn-default", **kwargs
 ):
     """
     Renders a `Search` button
@@ -481,13 +380,7 @@ def btn_search(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        type="submit",
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, type="submit", text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
@@ -499,7 +392,7 @@ def btn_close(
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-warning",
     data_dismiss=True,
-    **kwargs
+    **kwargs,
 ):
     """
     Renders a `Close` button
@@ -521,19 +414,13 @@ def btn_close(
         icon_position=icon_position,
         btn_css_color=btn_css_color,
         data_dismiss=data_dismiss,
-        **kwargs
+        **kwargs,
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_login(
-    context,
-    url,
-    text=_("Login"),
-    icon="login",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-default",
-    **kwargs
+    context, url, text=_("Login"), icon="login", icon_position=IconPosition.RIGHT, btn_css_color="btn-default", **kwargs
 ):
     """
     Renders a ``Login`` button
@@ -549,13 +436,7 @@ def btn_login(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
@@ -567,7 +448,7 @@ def btn_logout(
     icon="logout",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
-    **kwargs
+    **kwargs,
 ):
     """
     Renders a ``Logout`` button
@@ -583,25 +464,13 @@ def btn_logout(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_update(
-    context,
-    url,
-    text=_("Update"),
-    icon="edit",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-warning",
-    **kwargs
+    context, url, text=_("Update"), icon="edit", icon_position=IconPosition.RIGHT, btn_css_color="btn-warning", **kwargs
 ):
     """
     Renders a ``Update`` button
@@ -617,25 +486,13 @@ def btn_update(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_delete(
-    context,
-    url,
-    text=_("Delete"),
-    icon="trash",
-    icon_position=IconPosition.RIGHT,
-    btn_css_color="btn-danger",
-    **kwargs
+    context, url, text=_("Delete"), icon="trash", icon_position=IconPosition.RIGHT, btn_css_color="btn-danger", **kwargs
 ):
     """
     Renders a ``Delete`` button
@@ -651,13 +508,7 @@ def btn_delete(
     :return: Render-able dict
     """
     return btn_button(
-        context,
-        url=url,
-        text=text,
-        icon=icon,
-        icon_position=icon_position,
-        btn_css_color=btn_css_color,
-        **kwargs
+        context, url=url, text=text, icon=icon, icon_position=icon_position, btn_css_color=btn_css_color, **kwargs
     )
 
 
@@ -708,9 +559,7 @@ def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default"):
     )
 
 
-@register.inclusion_tag(
-    get_filename("buttons/%s/switch-button.html"), takes_context=False
-)
+@register.inclusion_tag(get_filename("buttons/%s/switch-button.html"), takes_context=False)
 def btn_switch(
     value,
     switch_alts,
@@ -720,7 +569,7 @@ def btn_switch(
     switch_url=None,
     title=None,
     btn_id=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Renders a switch button. When clicked, an ajax request is sent to server, and the value is possibly changed.
@@ -762,9 +611,7 @@ def btn_switch(
     return output
 
 
-@register.inclusion_tag(
-    get_filename("buttons/%s/single-button.html"), takes_context=False
-)
+@register.inclusion_tag(get_filename("buttons/%s/single-button.html"), takes_context=False)
 def btn_single(icon, color, alt, title=None):
     return {"icon": icon, "color": color, "alt": alt, "title": title}
 
