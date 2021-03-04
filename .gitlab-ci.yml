@@ -1,118 +1,64 @@
-image: python:3.5-jessie
+---
+# Gitlab tasks for the intranet application
+image: python:3.7-buster
 
 stages:
-  - build
-  - sonar
+  - lint
+  - deploy
 
 variables:
-  DEBUG_SONAR: 1
-  SONAR_VERSION: 3.2.0.1492
-  SONAR_SCANNER_OPTS: "-Xmx512m"
-  SONAR_HOST: "http://sonarqube.ville.tg/"
-  SONAR_SCANNER_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
+  DEBUG_SONAR: 0
+  DEBUG_FLAKE8: 0
 
-# Scans against sonar
-sonar_scan:
-  stage: build
-  variables:
-    DEBUG_SONAR: 1
-    SONAR_VERSION: 3.2.0.1492
-    SONAR_SCANNER_OPTS: "-Xmx512m"
-    SONAR_HOST: "http://sonarqube.ville.tg/"
-    SONAR_SCANNER_URL: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_VERSION}.zip
-  script:
-  # Installs OpenJDK JRE
-  - apt-get --yes -qq install openjdk-7-jre
-  # Installs requirements
-  - pip install --cache-dir .pip/ pip --upgrade
-  - pip install --cache-dir .pip/ --requirement requirements/sonar.txt --constraint requirements/constraints.txt
-  # Installs sonar-runner ZIP file
-  - if [[ ! -d sonar-scanner-${SONAR_VERSION} ]]; then
-  -     wget --no-verbose ${SONAR_SCANNER_URL}
-  -     unzip -q sonar-scanner-cli-${SONAR_VERSION}.zip
-  - fi
-  - test $DEBUG_SONAR -eq 1 && ls -la sonar-scanner-${SONAR_VERSION}/bin/
-  - test $DEBUG_SONAR -eq 1 && sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner --version
-
-  # Runs the sonar-runner
-  - export SONAR_SCANNER_OPTS=${SONAR_SCANNER_OPTS}
-  - export SONAR_USER_HOME=.
-  - sonar-scanner-${SONAR_VERSION}/bin/sonar-scanner -Dsonar.host.url=${SONAR_HOST}
-  cache:
-    paths:
-    - sonar-scanner-${SONAR_VERSION}/
-    - .pip/
+# Checks python code against flake8
+flake8:
+  stage: lint
+  before_script:
+    - pip --cache-dir .pip/ install flake8
+  script: |
+    [[ ${DEBUG_FLAKE8} -eq 1 ]] && ls -la
+    flake8 ./wagtailpolls
   tags:
     - python3.7
     - docker
 
-# Builds wheel and upload to PyPI
-release_tag:
-  stage: build
+release_staging:
+  stage: deploy
+  needs: [ flake8 ]
   before_script:
-  - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
-  script:
-  - python3 setup.py bdist_wheel
-  - twine upload --config-file ./.pypirc --repository pypi --skip-existing dist/*
-  artifacts:
-    paths:
-    - dist/
+    - pip --cache-dir .pip/ install -r requirements-deploy.txt
+  script: |
+    python3 setup.py sdist bdist_wheel
+    python3 -m twine upload \
+      --repository-url https://test.pypi.org/legacy/ \
+      --username "$USERNAME_STAGING" \
+      --password "$PASSWORD_STAGING" \
+      --skip-existing \
+      dist/*
   cache:
     paths:
-    - .pip/
-  only:
-    - tags
+      - .pip/
   tags:
     - python3.7
     - docker
 
-# Builds wheel and upload to PyPI/test
-release_test:
-  stage: build
+release:
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_TAG != null
+  needs: [ flake8 ]
   before_script:
-  - pip install --cache-dir .pip/ --upgrade --requirement requirements/release.txt
-  script:
-  - python3 setup.py bdist_wheel
-  - twine upload --config-file ./.pypirc --repository pypitest --skip-existing dist/*
-  artifacts:
-    paths:
-    - dist/
+    - pip --cache-dir .pip/ install -r requirements-deploy.txt
+  script: |
+    python3 setup.py sdist bdist_wheel
+    python3 -m twine upload \
+      --username "$USERNAME" \
+      --password "$PASSWORD" \
+      --skip-existing \
+      dist/*
   cache:
     paths:
-    - .pip/
-  tags:
-    - python3.7
-    - docker
-
-# Builds sphinx docs
-pages:
-  stage: build
-  before_script:
-  - test ! -d .pip && mkdir .pip
-  - if [[ -f requirements/common.txt ]] && [[ -f requirements/constraints.txt ]]; then
-  -     pip install --cache-dir .pip/
-          --requirement requirements/common.txt --constraint requirements/constraints.txt;
-  - fi
-  - pip install --cache-dir .pip/
-      --requirement requirements/docs.txt --constraint requirements/constraints.txt
-  script:
-  # Builds docs
-  - export PYTHONPATH=$PYTHONPATH:$(pwd)
-  - cd docs
-  - test $DEBUG_SPHINX -eq 1 && ls -la
-  - make html
-  - cd ..
-
-  # Copy built files to /public
-  - mv docs/build/html/ public/
-  artifacts:
-    paths:
-    - public/
-
-  cache:
-    paths:
-    - .pip/
-
+      - .pip/
   tags:
     - python3.7
     - docker
