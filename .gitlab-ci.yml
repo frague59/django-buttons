@@ -15,9 +15,9 @@ flake8:
   stage: lint
   before_script:
     - pip --cache-dir .pip/ install flake8
-  script: |
-    [[ ${DEBUG_FLAKE8} -eq 1 ]] && ls -la
-    flake8 ./wagtailpolls
+  script:
+    - "[[ ${DEBUG_FLAKE8} -eq 1 ]] && ls -la"
+    - flake8 ./buttons
   tags:
     - python3.7
     - docker
