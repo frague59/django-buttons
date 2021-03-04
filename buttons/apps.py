@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Django application config
 
@@ -7,17 +6,16 @@ Django application config
 :modulename: buttons.apps
 
 """
-
 import logging
+
 from django.apps import AppConfig
 
-__author__ = 'fguerin'
-logger = logging.getLogger('buttons.apps')
+__author__ = "fguerin"
+logger = logging.getLogger("buttons.apps")
 
 
 class ButtonsAppConfig(AppConfig):
-    name = 'buttons'
+    name = "buttons"
 
     def ready(self):
-        # noinspection PyUnresolvedReferences
-        from buttons.conf import ButtonsAppConf
+        from buttons.conf import ButtonsAppConf  # noqa

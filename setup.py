@@ -1,11 +1,12 @@
-import sys
 import os
+import sys
 from distutils.core import setup
+
 from setuptools import find_packages
 
 # Loads the version from package
 sys.path.append(os.path.join(os.path.dirname(__file__), "."))
-from buttons import __version__ as version
+from buttons import __version__ as version  # noqa
 
 setup(
     name="django-buttons",

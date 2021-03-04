@@ -31,5 +31,3 @@ buttons.models module
     :members:
     :undoc-members:
     :show-inheritance:
-
-

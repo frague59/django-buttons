@@ -1,0 +1,48 @@
+exclude: src/agenda-front/webpack-stats.json
+repos:
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: 'v5.7.0'
+    hooks:
+    - id: isort
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: 'v3.4.0'
+    hooks:
+      - id: trailing-whitespace
+        exclude: bower
+      - id: end-of-file-fixer
+        exclude: \.css(\.map)?$
+      - id: check-json
+        files: \.(json)$
+        exclude: bower
+      - id: check-yaml
+        exclude: bower
+      - id: fix-encoding-pragma
+        args: [--remove]
+        exclude: bower
+      - id: mixed-line-ending
+        args: [--fix=lf]
+        exclude: bower
+
+  - repo: https://github.com/syntaqx/git-hooks
+    rev: 'v0.0.16'
+    hooks:
+      - id: shellcheck
+        exclude: bower
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: 'v0.812'
+    hooks:
+      - id: mypy
+
+  - repo: https://github.com/psf/black
+    rev: '20.8b1'
+    hooks:
+      - id: black
+        args: ["--verbose"]
+
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: '3.8.4'
+    hooks:
+    - id: flake8
+      args: [--max-line-length, "120"]
