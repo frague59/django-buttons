@@ -6,7 +6,7 @@
               data-value="{{ value|escapejs }}"
               data-url="{{ switch_url }}" {{ data|expand_data }}>
             <span class="text-{{ value|yesno:switch_colors }}{{ large|yesno:' fa-2x,' }} switch-icon">
-            {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
+            {% {% fontawesome_icon value|yesno:switch_icons large=True fixed=True title=value|yesno:switch_alts %}
             </span>
             <span class="switch-title {% if hide_prefix %}sr-only{% endif %}">{{ title }}</span>
         </span>
