@@ -9,7 +9,7 @@ Template tags to display buttons in pages
 import enum
 import logging
 import pprint
-from typing import Any, Dict
+from typing import Any, Dict, Optional
 
 from django import template
 from django.conf import settings
@@ -47,6 +47,29 @@ class IconPosition(enum.Enum):
     NONE = "NONE"
 
 
+class ButtonText(enum.Enum):
+    """
+    Default texts for buttons
+    """
+
+    BACK = _("Back")
+    PREVIOUS = _("Previous")
+    NEXT = _("Next")
+    COPY = _("Copy")
+    DOWNLOAD = _("Download")
+    LINK = _("Link")
+    HOME = _("Home")
+    DELETE = _("Delete")
+    UPDATE = _("Update")
+    CREATE = _("Create")
+    LOGIN = _("Login")
+    LOGOUT = _("Logout")
+    SUBMIT = _("Submit")
+    LIST = _("List")
+    DETAIL = _("Detail")
+    SEARCH = _("Search")
+
+
 def get_param(key, kwargs, context, default=None):
     """
     Gets the parameter from the kwargs, then from the context and finally returns the default value
@@ -68,7 +91,10 @@ def get_param(key, kwargs, context, default=None):
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_button(context, **kwargs) -> Dict[str, Any]:
+def btn_button(
+    context,
+    **kwargs,
+) -> Dict[str, Any]:
     """
     Displays a default button
 
@@ -157,7 +183,7 @@ def btn_button(context, **kwargs) -> Dict[str, Any]:
 def btn_copy(
     context,
     url,
-    text=_("Copy"),
+    text=ButtonText.COPY.value,
     icon="copy",
     icon_position=IconPosition.RIGHT,
     **kwargs,
@@ -183,7 +209,7 @@ def btn_copy(
 def btn_download(
     context,
     url,
-    text=_("Download"),
+    text=ButtonText.DOWNLOAD.value,
     icon="download",
     icon_position=IconPosition.RIGHT,
     **kwargs,
@@ -208,7 +234,7 @@ def btn_download(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_back(
     context,
-    text=_("Back"),
+    text=ButtonText.BACK.value,
     icon="chevron-left",
     icon_position=IconPosition.LEFT,
     btn_css_color="btn-primary",
@@ -243,7 +269,7 @@ def btn_back(
 def btn_link(
     context,
     url,
-    text=_("Link"),
+    text=ButtonText.LINK.value,
     icon="link",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -278,7 +304,7 @@ def btn_link(
 def btn_home(
     context,
     url="/",
-    text=_("Home"),
+    text=ButtonText.HOME.value,
     icon="home",
     icon_position=IconPosition.LEFT,
     btn_css_color="btn-primary",
@@ -311,7 +337,7 @@ def btn_home(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_submit(
     context,
-    text=_("Submit"),
+    text=ButtonText.SUBMIT.value,
     icon="check",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -344,7 +370,7 @@ def btn_submit(
 def btn_list(
     context,
     url,
-    text=_("List"),
+    text=ButtonText.LIST.value,
     icon="list",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -372,7 +398,7 @@ def btn_list(
 def btn_detail(
     context,
     url,
-    text=_("Detail"),
+    text=ButtonText.DETAIL.value,
     icon="info",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -406,7 +432,7 @@ def btn_detail(
 def btn_create(
     context,
     url,
-    text=_("Create"),
+    text=ButtonText.CREATE.value,
     icon="plus",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -440,7 +466,7 @@ def btn_create(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_search(
     context,
-    text=_("Search"),
+    text=ButtonText.SEARCH.value,
     icon="search",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -505,7 +531,13 @@ def btn_close(
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_login(
-    context, url, text=_("Login"), icon="login", icon_position=IconPosition.RIGHT, btn_css_color="btn-default", **kwargs
+    context,
+    url,
+    text=ButtonText.LOGIN.value,
+    icon="login",
+    icon_position=IconPosition.RIGHT,
+    btn_css_color="btn-default",
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     Renders a ``Login`` button
@@ -535,7 +567,7 @@ def btn_login(
 def btn_logout(
     context,
     url,
-    text=_("Logout"),
+    text=ButtonText.LOGOUT.value,
     icon="logout",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -563,7 +595,7 @@ def btn_logout(
 def btn_update(
     context,
     url,
-    text=_("Update"),
+    text=ButtonText.UPDATE.value,
     icon="edit",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-warning",
@@ -597,7 +629,7 @@ def btn_update(
 def btn_delete(
     context,
     url,
-    text=_("Delete"),
+    text=ButtonText.DELETE.value,
     icon="trash",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-danger",
@@ -628,7 +660,12 @@ def btn_delete(
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_next(context, url, text=_("Next"), btn_css_color="btn-default") -> Dict[str, Any]:
+def btn_next(
+    context,
+    url,
+    text=ButtonText.NEXT.value,
+    btn_css_color="btn-default",
+) -> Dict[str, Any]:
     """
     Renders a ``Next`` button
 
@@ -652,7 +689,12 @@ def btn_next(context, url, text=_("Next"), btn_css_color="btn-default") -> Dict[
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default") -> Dict[str, Any]:
+def btn_previous(
+    context,
+    url,
+    text=ButtonText.PREVIOUS.value,
+    btn_css_color="btn-default",
+) -> Dict[str, Any]:
     """
     Renders a ``Previous`` button
 
@@ -676,14 +718,14 @@ def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default") 
 
 @register.inclusion_tag(get_filename("buttons/%s/switch-button.html"), takes_context=False)
 def btn_switch(
-    value,
-    switch_alts,
-    large=True,
-    switch_icons="toggle-on,toggle-off",
-    switch_colors="success,danger",
-    switch_url=None,
-    title=None,
-    btn_id=None,
+    value: Any,
+    switch_alts: str,
+    large: bool = True,
+    switch_icons: str = "toggle-on,toggle-off",
+    switch_colors: str = "success,danger",
+    switch_url: Optional[str] = None,
+    title: Optional[str] = None,
+    btn_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """

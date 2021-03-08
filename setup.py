@@ -2,6 +2,7 @@ import os
 import sys
 from distutils.core import setup
 from pathlib import Path
+
 from setuptools import find_packages
 
 # Loads the version from package
