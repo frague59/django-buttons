@@ -88,30 +88,34 @@ def query_string(parser, token):
 
 
 class QueryStringNode(template.Node):
-    def __init__(self, query_dict, mods, as_var):
+    def __init__(self, query_dict, modifiers, as_var):
         self.query_dict = query_dict
-        self.mods = mods
+        self.modifiers = modifiers
         self.as_var = as_var
 
     def render(self, context):
-        mods = [(smart_str(k, "ascii"), op, v.resolve(context)) for k, op, v in self.mods]
+        modifiers = [(smart_str(k, "ascii"), op, v.resolve(context)) for k, op, v in self.modifiers]
+
         if self.query_dict:
-            qdict = self.query_dict.resolve(context)
+            query_dict = self.query_dict.resolve(context)
         else:
-            qdict = None
+            query_dict = None
+
         # Internally work only with QueryDict
-        qdict = self._get_initial_query_dict(qdict)
+        query_dict = self._get_initial_query_dict(query_dict)
         # assert isinstance(query_dict, QueryDict)
-        for k, op, v in mods:
-            qdict.setlist(k, self._process_list(qdict.getlist(k), op, v))
-        qstring = qdict.urlencode()
-        if qstring:
-            qstring = "?" + qstring
+        for k, op, v in modifiers:
+            query_dict.setlist(k, self._process_modifiers_list(query_dict.getlist(k), op, v))
+
+        _query_string = query_dict.urlencode()
+        if _query_string:
+            _query_string = "?" + _query_string
+
         if self.as_var:
-            context[self.as_var] = qstring
+            context[self.as_var] = _query_string
             return ""
         else:
-            return qstring
+            return _query_string
 
     @staticmethod
     def _get_initial_query_dict(query_dict):
@@ -119,8 +123,8 @@ class QueryStringNode(template.Node):
             return QueryDict(None, mutable=True)
 
         if isinstance(query_dict, QueryDict):
-            _qdict = query_dict.copy()
-            return _qdict
+            _query_dict = query_dict.copy()
+            return _query_dict
 
         if isinstance(query_dict, str):
             if query_dict.startswith("?"):
@@ -150,7 +154,7 @@ class QueryStringNode(template.Node):
         return query_dict
 
     @staticmethod
-    def _process_list(current_list, op, val):
+    def _process_modifiers_list(current_list, op, val):
         if not val:
             if op == "=":
                 return []
