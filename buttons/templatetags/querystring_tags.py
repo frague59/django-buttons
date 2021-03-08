@@ -65,7 +65,7 @@ def query_string(parser, token):
         Result: '?tag=a&tag=b&tag=c&tag=d&year=2011&month=4
     """
     # matches 'tagname1+val1' or 'tagname1=val1' but not 'anyoldvalue'
-    mod_re = re.compile(r"^(\w+)(=|\+|-)(.*)$")
+    mod_re = re.compile(r"^(.\w+)(=|\+|-)(.*)$")
     bits = token.split_contents()
     qdict = None
     mods = []
