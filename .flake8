@@ -1,3 +1,5 @@
 [flake8]
 max-line-length = 120
 ignore = F405,W503
+exclude = .git,__pycache__,docs/source/conf.py,old,build,dist
+max-cognitive-complexity = 15

@@ -2,6 +2,7 @@ import os
 import sys
 from distutils.core import setup
 from pathlib import Path
+
 from setuptools import find_packages
 
 # Loads the version from package
@@ -13,7 +14,7 @@ readme_file = this_directory / "README.md"
 if readme_file.exists():
     long_description = readme_file.read_text()
 else:
-    long_description = None
+    long_description = ""
 
 setup(
     name="django-buttons",

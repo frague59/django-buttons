@@ -66,17 +66,17 @@ def query_string(parser, token):
     # matches 'tagname1+val1' or 'tagname1=val1' but not 'anyoldvalue'
     mod_re = re.compile(r"^(\w+)(=|\+|-)(.*)$")
     bits = token.split_contents()
-    qdict = None
+    query_dict = None
     mods = []
-    asvar = None
+    as_var = None
     bits = bits[1:]
     if len(bits) >= 2 and bits[-2] == "as":
-        asvar = bits[-1]
+        as_var = bits[-1]
         bits = bits[:-2]
     if len(bits) >= 1:
         first = bits[0]
         if not mod_re.match(first):
-            qdict = parser.compile_filter(first)
+            query_dict = parser.compile_filter(first)
             bits = bits[1:]
     for bit in bits:
         match = mod_re.match(bit)
@@ -84,86 +84,102 @@ def query_string(parser, token):
             raise template.TemplateSyntaxError("Malformed arguments to query_string tag")
         name, op, value = match.groups()
         mods.append((name, op, parser.compile_filter(value)))
-    return QueryStringNode(qdict, mods, asvar)
+    return QueryStringNode(query_dict, mods, as_var)
 
 
 class QueryStringNode(template.Node):
-    def __init__(self, qdict, mods, asvar):
-        self.qdict = qdict
-        self.mods = mods
-        self.asvar = asvar
+    def __init__(self, query_dict, modifiers, as_var):
+        self.query_dict = query_dict
+        self.modifiers = modifiers
+        self.as_var = as_var
 
     def render(self, context):
-        mods = [(smart_str(k, "ascii"), op, v.resolve(context)) for k, op, v in self.mods]
-        if self.qdict:
-            qdict = self.qdict.resolve(context)
+        modifiers = [(smart_str(k, "ascii"), op, v.resolve(context)) for k, op, v in self.modifiers]
+
+        if self.query_dict:
+            query_dict = self.query_dict.resolve(context)
         else:
-            qdict = None
+            query_dict = None
+
         # Internally work only with QueryDict
-        qdict = self._get_initial_query_dict(qdict)
-        # assert isinstance(qdict, QueryDict)
-        for k, op, v in mods:
-            qdict.setlist(k, self._process_list(qdict.getlist(k), op, v))
-        qstring = qdict.urlencode()
-        if qstring:
-            qstring = "?" + qstring
-        if self.asvar:
-            context[self.asvar] = qstring
+        query_dict = self._get_initial_query_dict(query_dict)
+        # assert isinstance(query_dict, QueryDict)
+        for k, op, v in modifiers:
+            query_dict.setlist(k, self._process_modifiers_list(query_dict.getlist(k), op, v))
+
+        _query_string = query_dict.urlencode()
+        if _query_string:
+            _query_string = "?" + _query_string
+
+        if self.as_var:
+            context[self.as_var] = _query_string
             return ""
         else:
-            return qstring
+            return _query_string
 
-    def _get_initial_query_dict(self, qdict):
-        if not qdict:
-            qdict = QueryDict(None, mutable=True)
-        elif isinstance(qdict, QueryDict):
-            qdict = qdict.copy()
-        elif isinstance(qdict, str):
-            if qdict.startswith("?"):
-                qdict = qdict[1:]
-            qdict = QueryDict(qdict, mutable=True)
-        else:
-            # Accept any old dict or list of pairs.
-            try:
-                pairs = list(qdict.items())
-            except Exception:
-                pairs = qdict
-            qdict = QueryDict(None, mutable=True)
-            # Enter each pair into QueryDict object:
-            try:
-                for k, v in pairs:
-                    # Convert values to unicode so that detecting
-                    # membership works for numbers.
-                    if isinstance(v, (list, tuple)):
-                        for e in v:
-                            qdict.appendlist(k, str(e))
-                    else:
-                        qdict.appendlist(k, str(v))
-            except Exception:
-                # Wrong data structure, qdict remains empty.
-                pass
-        return qdict
+    @staticmethod
+    def _get_initial_query_dict(query_dict):
+        if not query_dict:
+            return QueryDict(None, mutable=True)
 
-    def _process_list(self, current_list, op, val):
+        if isinstance(query_dict, QueryDict):
+            _query_dict = query_dict.copy()
+            return _query_dict
+
+        if isinstance(query_dict, str):
+            if query_dict.startswith("?"):
+                query_dict = query_dict[1:]
+            return QueryDict(query_dict, mutable=True)
+
+        # Accept any old dict or list of pairs.
+        try:
+            pairs = list(query_dict.items())
+        except Exception:  # noqa
+            pairs = query_dict
+
+        query_dict = QueryDict(None, mutable=True)
+
+        # Enter each pair into QueryDict object:
+        try:
+            for key, val in pairs:
+                # Convert values to unicode so that detecting
+                # membership works for numbers.
+                if isinstance(val, (list, tuple)):
+                    for e in val:
+                        query_dict.appendlist(key, str(e))
+                else:
+                    query_dict.appendlist(key, str(val))
+        except Exception:  # noqa
+            pass
+        return query_dict
+
+    @staticmethod
+    def _process_modifiers_list(current_list, op, val):
         if not val:
             if op == "=":
                 return []
             else:
                 return current_list
+
         # Deal with lists only.
         if not isinstance(val, (list, tuple)):
             val = [val]
         val = [str(v) for v in val]
+
         # Remove
         if op == "-":
             for v in val:
                 while v in current_list:
                     current_list.remove(v)
+            return current_list
+
         # Replace
-        elif op == "=":
+        if op == "=":
             current_list = val
+            return current_list
+
         # Add
-        elif op == "+":
+        if op == "+":
             for v in val:
                 current_list.append(v)
-        return current_list
+            return current_list

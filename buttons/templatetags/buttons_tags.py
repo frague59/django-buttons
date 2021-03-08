@@ -9,12 +9,12 @@ Template tags to display buttons in pages
 import enum
 import logging
 import pprint
-from typing import Any, Dict
+from typing import Any, Dict, Optional, Union
 
 from django import template
 from django.conf import settings
 from django.forms.utils import flatatt
-from django.utils.safestring import mark_safe
+from django.utils.safestring import SafeText, mark_safe
 from django.utils.translation import gettext as _
 
 logger = logging.getLogger("buttons.templatetags.buttons_tags")
@@ -47,6 +47,29 @@ class IconPosition(enum.Enum):
     NONE = "NONE"
 
 
+class ButtonText(enum.Enum):
+    """
+    Default texts for buttons
+    """
+
+    BACK = _("Back")
+    PREVIOUS = _("Previous")
+    NEXT = _("Next")
+    COPY = _("Copy")
+    DOWNLOAD = _("Download")
+    LINK = _("Link")
+    HOME = _("Home")
+    DELETE = _("Delete")
+    UPDATE = _("Update")
+    CREATE = _("Create")
+    LOGIN = _("Login")
+    LOGOUT = _("Logout")
+    SUBMIT = _("Submit")
+    LIST = _("List")
+    DETAIL = _("Detail")
+    SEARCH = _("Search")
+
+
 def get_param(key, kwargs, context, default=None):
     """
     Gets the parameter from the kwargs, then from the context and finally returns the default value
@@ -67,8 +90,28 @@ def get_param(key, kwargs, context, default=None):
     return default
 
 
+def _get_btn_id(context, **kwargs) -> str:
+    btn_id = kwargs.pop("id", None) or context.get("id") or kwargs.pop("btn_id", None) or context.get("btn_id")
+    logger.debug(f"_get_btn_id() btn_id = {btn_id}")
+    return btn_id
+
+
+def _get_icon_position(context, **kwargs) -> str:
+    icon_position = kwargs.pop("icon_position", None) or context.get("icon_position", settings.BUTTONS_ICON_POSITION)
+
+    if isinstance(icon_position, IconPosition):
+        icon_position = icon_position.value
+    else:
+        icon_position = IconPosition(icon_position).value
+    logger.debug(f"_get_icon_position() btn_id = {icon_position}")
+    return icon_position
+
+
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_button(context, **kwargs) -> Dict[str, Any]:
+def btn_button(
+    context,
+    **kwargs,
+) -> Dict[str, Any]:
     """
     Displays a default button
 
@@ -92,32 +135,40 @@ def btn_button(context, **kwargs) -> Dict[str, Any]:
     """
     # logger.debug('btn_button() kwargs = %s', kwargs)
 
-    text = kwargs.pop("text", context.get("text"))
-    title = kwargs.pop("title", context.get("title"))
-    url = kwargs.pop("url", context.get("url"))
+    text = kwargs.pop("text", None) or context.get("text")
+    title = kwargs.pop("title", None) or context.get("title")
+    url = kwargs.pop("url", None) or context.get("url")
     _type = get_param("btn_type", kwargs, context, "button")
-    btn_id = kwargs.pop("id", context.get("id")) or kwargs.pop("btn_id", context.get("btn_id"))
+    btn_id = _get_btn_id(context, **kwargs)
 
     btn_name = kwargs.pop("btn_name", None) or kwargs.pop("name", None)
     btn_value = kwargs.pop("btn_value", None) or kwargs.pop("value", None)
 
-    icon = kwargs.pop("icon", context.get("icon", settings.BUTTONS_ICON))
-    icon_position = kwargs.pop("icon_position", context.get("icon_position", settings.BUTTONS_ICON_POSITION))
+    icon = kwargs.pop("icon", None) or context.get(
+        "icon",
+        settings.BUTTONS_ICON,
+    )
 
-    if isinstance(icon_position, IconPosition):
-        icon_position = icon_position.value
-    else:
-        icon_position = IconPosition(icon_position).value
+    icon_position = _get_icon_position(context, **kwargs)
 
-    icon_css_extra = kwargs.pop("icon_css_extra", context.get("icon_css_extra", settings.BUTTONS_ICON_CSS_EXTRA))
-    btn_css_color = kwargs.pop("btn_css_color", context.get("btn_css_color", settings.BUTTONS_BTN_CSS_COLOR))
-    btn_css_extra = kwargs.pop("btn_css_extra", context.get("btn_css_extra", settings.BUTTONS_BTN_CSS_EXTRA))
+    icon_css_extra = kwargs.pop("icon_css_extra", None) or context.get(
+        "icon_css_extra",
+        settings.BUTTONS_ICON_CSS_EXTRA,
+    )
+    btn_css_color = kwargs.pop("btn_css_color", None) or context.get(
+        "btn_css_color",
+        settings.BUTTONS_BTN_CSS_COLOR,
+    )
+    btn_css_extra = kwargs.pop("btn_css_extra", None) or context.get(
+        "btn_css_extra",
+        settings.BUTTONS_BTN_CSS_EXTRA,
+    )
 
     # data-* items
-    data_dismiss = kwargs.pop("data_dismiss", context.get("data_dismiss"))
-    data_toggle = kwargs.pop("data_toggle", context.get("data_toggle"))
-    data_target = kwargs.pop("data_target", context.get("data_target"))
-    data_placement = kwargs.pop("data_placement", context.get("data_placement"))
+    data_dismiss = kwargs.pop("data_dismiss", None) or context.get("data_dismiss")
+    data_toggle = kwargs.pop("data_toggle", None) or context.get("data_toggle")
+    data_target = kwargs.pop("data_target", None) or context.get("data_target")
+    data_placement = kwargs.pop("data_placement", None) or context.get("data_placement")
 
     # Dict initialization
     output = {
@@ -143,7 +194,9 @@ def btn_button(context, **kwargs) -> Dict[str, Any]:
         "debug": settings.DEBUG,
     }
     if kwargs:
-        output.update({"flatatt": flatatt(kwargs)})
+        output.update(
+            {"flatatt": flatatt(kwargs)},
+        )
 
     if btn_value:
         output.update({"value": btn_value})
@@ -157,7 +210,7 @@ def btn_button(context, **kwargs) -> Dict[str, Any]:
 def btn_copy(
     context,
     url,
-    text=_("Copy"),
+    text=ButtonText.COPY.value,
     icon="copy",
     icon_position=IconPosition.RIGHT,
     **kwargs,
@@ -176,14 +229,21 @@ def btn_copy(
 
     :return: Render-able dict
     """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
+    return btn_button(
+        context,
+        url=url,
+        text=text,
+        icon=icon,
+        icon_position=icon_position,
+        **kwargs,
+    )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_download(
     context,
     url,
-    text=_("Download"),
+    text=ButtonText.DOWNLOAD.value,
     icon="download",
     icon_position=IconPosition.RIGHT,
     **kwargs,
@@ -202,13 +262,20 @@ def btn_download(
 
     :return: Render-able dict
     """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
+    return btn_button(
+        context,
+        url=url,
+        text=text,
+        icon=icon,
+        icon_position=icon_position,
+        **kwargs,
+    )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_back(
     context,
-    text=_("Back"),
+    text=ButtonText.BACK.value,
     icon="chevron-left",
     icon_position=IconPosition.LEFT,
     btn_css_color="btn-primary",
@@ -243,7 +310,7 @@ def btn_back(
 def btn_link(
     context,
     url,
-    text=_("Link"),
+    text=ButtonText.LINK.value,
     icon="link",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -277,10 +344,10 @@ def btn_link(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_home(
     context,
-    url="/",
-    text=_("Home"),
-    icon="home",
-    icon_position=IconPosition.LEFT,
+    url: str = "/",
+    text: str = ButtonText.HOME.value,
+    icon: str = "home",
+    icon_position: Union[IconPosition, str] = IconPosition.LEFT,
     btn_css_color="btn-primary",
     **kwargs,
 ) -> Dict[str, Any]:
@@ -311,7 +378,7 @@ def btn_home(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_submit(
     context,
-    text=_("Submit"),
+    text=ButtonText.SUBMIT.value,
     icon="check",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -344,7 +411,7 @@ def btn_submit(
 def btn_list(
     context,
     url,
-    text=_("List"),
+    text=ButtonText.LIST.value,
     icon="list",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -372,7 +439,7 @@ def btn_list(
 def btn_detail(
     context,
     url,
-    text=_("Detail"),
+    text=ButtonText.DETAIL.value,
     icon="info",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -406,7 +473,7 @@ def btn_detail(
 def btn_create(
     context,
     url,
-    text=_("Create"),
+    text=ButtonText.CREATE.value,
     icon="plus",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-primary",
@@ -440,7 +507,7 @@ def btn_create(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_search(
     context,
-    text=_("Search"),
+    text=ButtonText.SEARCH.value,
     icon="search",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -505,7 +572,13 @@ def btn_close(
 
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_login(
-    context, url, text=_("Login"), icon="login", icon_position=IconPosition.RIGHT, btn_css_color="btn-default", **kwargs
+    context,
+    url,
+    text=ButtonText.LOGIN.value,
+    icon="login",
+    icon_position=IconPosition.RIGHT,
+    btn_css_color="btn-default",
+    **kwargs,
 ) -> Dict[str, Any]:
     """
     Renders a ``Login`` button
@@ -535,7 +608,7 @@ def btn_login(
 def btn_logout(
     context,
     url,
-    text=_("Logout"),
+    text=ButtonText.LOGOUT.value,
     icon="logout",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-default",
@@ -563,7 +636,7 @@ def btn_logout(
 def btn_update(
     context,
     url,
-    text=_("Update"),
+    text=ButtonText.UPDATE.value,
     icon="edit",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-warning",
@@ -597,7 +670,7 @@ def btn_update(
 def btn_delete(
     context,
     url,
-    text=_("Delete"),
+    text=ButtonText.DELETE.value,
     icon="trash",
     icon_position=IconPosition.RIGHT,
     btn_css_color="btn-danger",
@@ -628,7 +701,12 @@ def btn_delete(
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_next(context, url, text=_("Next"), btn_css_color="btn-default") -> Dict[str, Any]:
+def btn_next(
+    context,
+    url,
+    text=ButtonText.NEXT.value,
+    btn_css_color="btn-default",
+) -> Dict[str, Any]:
     """
     Renders a ``Next`` button
 
@@ -652,7 +730,12 @@ def btn_next(context, url, text=_("Next"), btn_css_color="btn-default") -> Dict[
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
-def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default") -> Dict[str, Any]:
+def btn_previous(
+    context,
+    url,
+    text=ButtonText.PREVIOUS.value,
+    btn_css_color="btn-default",
+) -> Dict[str, Any]:
     """
     Renders a ``Previous`` button
 
@@ -676,14 +759,14 @@ def btn_previous(context, url, text=_("Previous"), btn_css_color="btn-default") 
 
 @register.inclusion_tag(get_filename("buttons/%s/switch-button.html"), takes_context=False)
 def btn_switch(
-    value,
-    switch_alts,
-    large=True,
-    switch_icons="toggle-on,toggle-off",
-    switch_colors="success,danger",
-    switch_url=None,
-    title=None,
-    btn_id=None,
+    value: Any,
+    switch_alts: str,
+    large: bool = True,
+    switch_icons: str = "toggle-on,toggle-off",
+    switch_colors: str = "success,danger",
+    switch_url: Optional[str] = None,
+    title: Optional[str] = None,
+    btn_id: Optional[str] = None,
     **kwargs,
 ) -> Dict[str, Any]:
     """
@@ -723,21 +806,30 @@ def btn_switch(
     if data:
         output.update({"data": data})
 
+    logger.debug(f"btn_switch() output = {pprint.pformat(output, indent=2)}")
     return output
 
 
 @register.inclusion_tag(get_filename("buttons/%s/single-button.html"), takes_context=False)
-def btn_single(icon, color, alt, title=None) -> Dict[str, Any]:
-    return {
+def btn_single(
+    icon,
+    color,
+    alt,
+    title=None,
+) -> Dict[str, Any]:
+
+    output = {
         "icon": icon,
         "color": color,
         "alt": alt,
         "title": title,
     }
+    logger.debug(f"btn_single() output = {pprint.pformat(output, indent=2)}")
+    return output
 
 
 @register.filter
-def expand_data(data):
+def expand_data(data) -> SafeText:
     """
     Expands a dict containing (key, value) pairs into a serie of data-(key)="(value)" HTML attributes
 
@@ -757,6 +849,8 @@ def expand_data(data):
     for key, value in list(data.items()):
         if isinstance(value, bool):
             value = str(value).lower()
-        output += ('data-%(k)s="%(v)s"' % {"k": key, "v": value},)
+        output.append(
+            f'data-{key}="{value}"',
+        )
     logger.debug("expand_data(%s) output = %s", data, output)
     return mark_safe(" ".join(output))
