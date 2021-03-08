@@ -9,12 +9,12 @@ Template tags to display buttons in pages
 import enum
 import logging
 import pprint
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, Union
 
 from django import template
 from django.conf import settings
 from django.forms.utils import flatatt
-from django.utils.safestring import mark_safe
+from django.utils.safestring import mark_safe, SafeString
 from django.utils.translation import gettext as _
 
 logger = logging.getLogger("buttons.templatetags.buttons_tags")
@@ -169,7 +169,9 @@ def btn_button(
         "debug": settings.DEBUG,
     }
     if kwargs:
-        output.update({"flatatt": flatatt(kwargs)})
+        output.update(
+            {"flatatt": flatatt(kwargs)},
+        )
 
     if btn_value:
         output.update({"value": btn_value})
@@ -202,7 +204,14 @@ def btn_copy(
 
     :return: Render-able dict
     """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
+    return btn_button(
+        context,
+        url=url,
+        text=text,
+        icon=icon,
+        icon_position=icon_position,
+        **kwargs,
+    )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
@@ -228,7 +237,14 @@ def btn_download(
 
     :return: Render-able dict
     """
-    return btn_button(context, url=url, text=text, icon=icon, icon_position=icon_position, **kwargs)
+    return btn_button(
+        context,
+        url=url,
+        text=text,
+        icon=icon,
+        icon_position=icon_position,
+        **kwargs,
+    )
 
 
 @register.inclusion_tag(get_filename(), takes_context=True)
@@ -303,10 +319,10 @@ def btn_link(
 @register.inclusion_tag(get_filename(), takes_context=True)
 def btn_home(
     context,
-    url="/",
-    text=ButtonText.HOME.value,
-    icon="home",
-    icon_position=IconPosition.LEFT,
+    url: str = "/",
+    text: str = ButtonText.HOME.value,
+    icon: str = "home",
+    icon_position: Union[IconPosition, str] = IconPosition.LEFT,
     btn_css_color="btn-primary",
     **kwargs,
 ) -> Dict[str, Any]:
@@ -769,7 +785,12 @@ def btn_switch(
 
 
 @register.inclusion_tag(get_filename("buttons/%s/single-button.html"), takes_context=False)
-def btn_single(icon, color, alt, title=None) -> Dict[str, Any]:
+def btn_single(
+    icon,
+    color,
+    alt,
+    title=None,
+) -> Dict[str, Any]:
     return {
         "icon": icon,
         "color": color,
@@ -779,7 +800,7 @@ def btn_single(icon, color, alt, title=None) -> Dict[str, Any]:
 
 
 @register.filter
-def expand_data(data):
+def expand_data(data) -> SafeString:
     """
     Expands a dict containing (key, value) pairs into a serie of data-(key)="(value)" HTML attributes
 
@@ -799,6 +820,8 @@ def expand_data(data):
     for key, value in list(data.items()):
         if isinstance(value, bool):
             value = str(value).lower()
-        output += ('data-%(k)s="%(v)s"' % {"k": key, "v": value},)
+        output.append(
+            f'data-{key}="{value}"',
+        )
     logger.debug("expand_data(%s) output = %s", data, output)
     return mark_safe(" ".join(output))
