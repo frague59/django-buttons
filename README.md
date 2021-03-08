@@ -20,7 +20,7 @@ INSTALLED_APPS = [
    ...
 ]
 
-BUTTONS_FONTAWESOME_VERSION = 4 # Use 5 ti use fontawesome-5 as icon library
+BUTTONS_FONTAWESOME_VERSION = 4 # Use 5 to use fontawesome-5 as icon library
 ```
 
 ## Use buttons in your templates

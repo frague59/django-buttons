@@ -17,11 +17,11 @@
                         {% if data_target %}data-target="{{ data_target }}" {% endif %}
                         {% if flatatt %}{{ flatatt }}{% endif %}>
                     {% if licon_position == 'LEFT' %}
-                        {% fontawesome_icon icon %}&nbsp;{{ text }}
+                        {% {% fontawesome_icon icon %}&nbsp;{{ text }}
                     {% elif licon_position == 'RIGHT' %}
-                        {{ text }}&nbsp;{% fontawesome_icon icon %}
+                        {{ text }}&nbsp;{% {% fontawesome_icon icon %}
                     {% elif licon_position == 'ONLY' %}
-                        {% fontawesome_icon icon %}
+                        {% {% fontawesome_icon icon %}
                     {% else %}
                         {{ text }}
                     {% endif %}
@@ -40,11 +40,11 @@
                         {% if value %}value="{{ value }}"{% endif %}
                         {% if flatatt %}{{ flatatt }}{% endif %}>
                     {% if licon_position == 'LEFT' %}
-                        {% fontawesome_icon icon %}&nbsp;{{ text }}
+                        {% {% fontawesome_icon icon %}&nbsp;{{ text }}
                     {% elif licon_position == 'RIGHT' %}
-                        {{ text }}&nbsp;{% fontawesome_icon icon %}
+                        {{ text }}&nbsp;{% {% fontawesome_icon icon %}
                     {% elif licon_position == 'ONLY' %}
-                        {% fontawesome_icon icon %}
+                        {% {% fontawesome_icon icon %}
                     {% else %}
                         {{ text }}
                     {% endif %}

@@ -20,14 +20,16 @@ class ButtonsAppConf(AppConf):
     App con for :mod:`buttons:buttons` application
     """
 
-    ICON_POSITION = "RIGHT"
-    ICON = "exclamation"
-    ICON_CSS_EXTRA = ""
+    ICON_POSITION: str = "RIGHT"
+    ICON: str = "exclamation"
+    ICON_CSS_EXTRA: str = ""
 
-    FONTAWESOME_VERSION = 5
+    FONTAWESOME_VERSION: int = 5
 
-    BTN_CSS_COLOR = "btn-default"
-    BTN_CSS_EXTRA = "btn-sm"
+    BTN_CSS_COLOR: str = "btn-default"
+    BTN_CSS_EXTRA: str = "btn-sm"
+
+    DEFAULT_TEMPLATE_PATH: str = "buttons/{package}/button.html"
 
     class Meta:
         prefix = "buttons"
